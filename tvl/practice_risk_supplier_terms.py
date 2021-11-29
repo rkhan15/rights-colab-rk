@@ -37,7 +37,6 @@ risk_category_to_term_mapping_SIMPLE = {
 
     'Other': ['alleg', 'accus', 'exploit', 'expose', 'investigat',
               'police', 'enforcement', 'security force', 'inspection', 'inspector',
-              'purchasing', 'purchasing practices',  # Added 11/28
               ],
 
     'Other-RK': ['scandal', 'government action', 'share price', 'share value',
@@ -151,6 +150,7 @@ practice_category_to_term_mapping_SIMPLE = {
     ],
     'Other': ['labor rights violation',
               'worker representation', 'representation',  # Added 11/28
+              'purchasing', 'purchasing practices',  # Added 11/28
               ]
 }
 

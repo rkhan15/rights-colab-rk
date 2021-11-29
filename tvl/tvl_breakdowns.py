@@ -66,7 +66,9 @@ def get_industry_level_practice_breakdown(labeled_industry_articles, industry_to
     # TODO: Add to this dict as needed for future terms
     subterm_category_practice = {
         'wage': 'Wages',
-        'lead time': 'Negative-Practices'
+        'lead time': 'Negative-Practices',
+        'purchasing': 'Other',
+        'representation': 'Other'
     }
     for subterm, category in subterm_category_practice.items():
         remove_dupe_counts_of_practice_term(subterm, category, col_name_article_or_event,
