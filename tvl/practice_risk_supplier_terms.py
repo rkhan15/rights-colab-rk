@@ -1,4 +1,6 @@
-# SUPPLY CHAIN MGMT-RELATED TERMS ONLY
+import re
+
+# FIND SUPPLY CHAIN MGMT-RELATED TERMS ONLY BELOW
 
 START_REGEX = '(?<![^ .,?!;])'
 
@@ -6,6 +8,39 @@ START_REGEX = '(?<![^ .,?!;])'
 def attach_regex_to_beginning_of_terms(terms_lst, regex=START_REGEX):
     if regex == '(?<![^ .,?!;])':
         return [regex + term for term in terms_lst]
+
+
+def create_comprehensive_term_regex_cleaning_dict(
+        term_type, category_to_term_mapping_SIMPLE, category_to_term_mapping_COMPLEX):
+    # term_type_dict = {'term_type_cat': {'clean term': 'regex_lst': {['fmt1', 'fmt2']}, 'extra_cleaning': True}}
+    term_type_regexes_cleaning = {}
+    for term_cat, term_lst in category_to_term_mapping_SIMPLE.items():
+
+        # Create dictionary for term type category
+        if term_cat not in term_type_regexes_cleaning:
+            term_type_regexes_cleaning[term_cat] = dict()
+
+        # Variable for new category dict for `term_type_regexes_cleaning`
+        term_cat_dict = term_type_regexes_cleaning[term_cat]
+
+        term_cat_SIMPLE_lst = category_to_term_mapping_SIMPLE[term_cat]
+        for term_SIMPLE in term_cat_SIMPLE_lst:
+            # term_regex = re.compile(attach_regex_to_beginning_of_terms([term_SIMPLE])[0])
+            term_regex_str_lst = attach_regex_to_beginning_of_terms([term_SIMPLE])
+            # term_cat_dict[term_SIMPLE] = {'regex_lst': [re.compile(START_REGEX + regex) for regex in term_regex_str_lst], 'extra_cleaning': False, 'terms_to_remove': []}  # TODO: Create detailed function for examples of the term to ignore, wich will have extra_cleaning=True
+            term_cat_dict[term_SIMPLE] = {'regex_lst': [re.compile(regex) for regex in term_regex_str_lst],
+                                          'extra_cleaning': False, 'terms_to_remove': [],
+                                          'context_words': []}  # TODO: Create detailed function for examples of the term to ignore, wich will have extra_cleaning=True
+
+        term_cat_COMPLEX = category_to_term_mapping_COMPLEX[term_cat]
+        for term_clean_COMPLEX, term_COMPLEX_regex_list in term_cat_COMPLEX.items():
+            # term_regex_str_lst = attach_regex_to_beginning_of_terms(term_COMPLEX_dict)
+            term_cat_dict[term_clean_COMPLEX] = {'regex_lst': [re.compile(regex) for regex in term_COMPLEX_regex_list],
+                                                 'extra_cleaning': False, 'terms_to_remove': [], 'context_words': []}
+
+        term_type_regexes_cleaning[term_cat] = term_cat_dict
+
+    return term_type_regexes_cleaning
 
 
 # Risk terms
@@ -181,7 +216,7 @@ practice_category_to_term_mapping_COMPLEX = {
     'Work-Conditions': {'collective bargaining agreement': attach_regex_to_beginning_of_terms(
         ['collective bargaining agreement', 'cba[s]?\W']),
                         'turnover': attach_regex_to_beginning_of_terms(
-                            ['high turnover', 'worker turnover', 'employee turnover', 'turnover rate']),
+                            ['high turnover', 'worker turnover', 'employee turnover', 'turnover rate', 'voluntary turnover']),  # TODO: get back to this
                         'unsafe conditions': attach_regex_to_beginning_of_terms(
                             ['unsafe(.*)condition', 'hazard(.*)condition', 'working conditions',
                              'deteriorating(.*)condition']),
@@ -224,3 +259,80 @@ supplier_relship_category_to_term_mapping_SIMPLE = {
 supplier_relship_category_to_term_mapping_COMPLEX = {
     'Core': {'sweatshop': attach_regex_to_beginning_of_terms(['sweatshop', 'sweat factory'])}
 }
+
+# Get dictionaries of practice/risk/supplier terms
+practice_terms_regex_dict = create_comprehensive_term_regex_cleaning_dict(
+    term_type='practice',
+    category_to_term_mapping_SIMPLE=practice_category_to_term_mapping_SIMPLE,
+    category_to_term_mapping_COMPLEX=practice_category_to_term_mapping_COMPLEX)
+
+risk_terms_regex_dict = create_comprehensive_term_regex_cleaning_dict(
+    term_type='risk',
+    category_to_term_mapping_SIMPLE=risk_category_to_term_mapping_SIMPLE,
+    category_to_term_mapping_COMPLEX=risk_category_to_term_mapping_COMPLEX)
+
+supplier_relship_regex_dict = create_comprehensive_term_regex_cleaning_dict(
+    term_type='supplier-relship',
+    category_to_term_mapping_SIMPLE=supplier_relship_category_to_term_mapping_SIMPLE,
+    category_to_term_mapping_COMPLEX=supplier_relship_category_to_term_mapping_COMPLEX)
+
+# Adding extra cleaning terms here (during processing, any mentions of
+# practice/risk terms in the irrelevant contexts below will be excluded)
+
+# agent
+# practice_terms_regex_dict['Mdrn-Slav-Risk']['agent']['extra_cleaning'] = True
+# practice_terms_regex_dict['Mdrn-Slav-Risk']['agent']['terms_to_remove'] = ['recruitment agent']
+
+# third party
+# practice_terms_regex_dict['Mdrn-Slav-Risk']['third party']['extra_cleaning'] = True
+# practice_terms_regex_dict['Mdrn-Slav-Risk']['third party']['terms_to_remove'] = ['independent third party']
+
+# union
+practice_terms_regex_dict['Good-Practices']['union']['extra_cleaning'] = True
+practice_terms_regex_dict['Good-Practices']['union']['terms_to_remove'] = ['european union', 'customs union']
+
+# fine
+risk_terms_regex_dict['Financial-Loss']['fine']['extra_cleaning'] = True
+risk_terms_regex_dict['Financial-Loss']['fine']['terms_to_remove'] = ['finecast', 'fine fragrance', 'fine and tall',
+                                                                      'driftable fine', 'fine chemical',
+                                                                      'fine construction level', 'fine-grain',
+                                                                      'fine partic', 'finergreen', 'fine molecular',
+                                                                      'fine wine', 'fine product', 'fine paper',
+                                                                      'fine balanc', 'fine-tun', 'fine fib',
+                                                                      'finely', 'fine, sand', 'fine tea', 'finest',
+                                                                      'finesse']
+
+# strike
+risk_terms_regex_dict['Worker-Protest']['strike']['extra_cleaning'] = True
+risk_terms_regex_dict['Worker-Protest']['strike']['terms_to_remove'] = ["disaster(s\b|\b) strike", 'strike deal',
+                                                                        'weather strike', 'bridge strike',
+                                                                        'joint strike fighter']
+
+# reimbursement
+risk_terms_regex_dict['Financial-Loss']['reimburse']['extra_cleaning'] = True
+risk_terms_regex_dict['Financial-Loss']['reimburse']['terms_to_remove'] = ['tuition reimbursement']
+risk_terms_regex_dict['Remedy']['reimburse']['extra_cleaning'] = True
+risk_terms_regex_dict['Remedy']['reimburse']['terms_to_remove'] = ['tuition reimbursement']
+
+# block import
+risk_terms_regex_dict['Operational-Costs']['block import']['extra_cleaning'] = True
+risk_terms_regex_dict['Operational-Costs']['block import']['terms_to_remove'] = ['import bank']
+
+# court
+risk_terms_regex_dict['Legal-Risk']['court']['extra_cleaning'] = True
+risk_terms_regex_dict['Legal-Risk']['court']['terms_to_remove'] = ['courtyard']
+
+# pricing pressure
+practice_terms_regex_dict['Negative-Practices']['pricing pressure']['context_words'] = ['supplier', 'factory',
+                                                                                        'manufactur', 'warehouse',
+                                                                                        'workshop']
+practice_terms_regex_dict['Good-Practices']['contract']['context_words'] = ['supplier']
+
+# all supplier context words:
+relationship_words = ['relationship', 'purchaser', 'order', 'lead time',
+                      'cancel([l]?(ed)|([l]?ing))? order', 'cancellation',
+                      'buyer', 'outsourc', 'subcontract']
+for core_term in supplier_relship_category_to_term_mapping_SIMPLE['Core']:
+    supplier_relship_regex_dict['Core'][core_term]['context_words'] = relationship_words
+for core_term in supplier_relship_category_to_term_mapping_COMPLEX['Core']:
+    supplier_relship_regex_dict['Core'][core_term]['context_words'] = relationship_words

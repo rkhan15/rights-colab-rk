@@ -3,14 +3,6 @@ import numpy as np
 import os
 import pandas as pd
 import re
-import matplotlib.pyplot as plt
-import seaborn as sns
-
-import plotly.graph_objects as go
-import plotly.figure_factory as ff
-import plotly.express as px
-
-from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from practice_risk_supplier_terms import *
 
 pd.set_option('display.max_columns', None)
@@ -22,7 +14,7 @@ START_REGEX = '(?<![^ .,?!;])'
 
 
 def gather_file_names_for_all_industries(
-        tvl_raw_dir, # Create shortcut for this folder in your personal drive: https://drive.google.com/drive/folders/1S9MvX0UI7hfrSxYi3DwnxD3QL7mK_s29?usp=sharing
+        tvl_raw_dir,  # Create shortcut for this folder in your personal drive: https://drive.google.com/drive/folders/1S9MvX0UI7hfrSxYi3DwnxD3QL7mK_s29?usp=sharing
         gic_dir,
         file_prefix='Truvalue_Spotlights_'):
 
@@ -44,39 +36,6 @@ def gather_file_names_for_all_industries(
         industry_files[industry_name] += industry_file_names
 
     return industry_files
-
-
-def create_comprehensive_term_regex_cleaning_dict(
-        term_type, category_to_term_mapping_SIMPLE, category_to_term_mapping_COMPLEX):
-    # term_type_dict = {'term_type_cat': {'clean term': 'regex_lst': {['fmt1', 'fmt2']}, 'extra_cleaning': True}}
-    term_type_regexes_cleaning = {}
-    for term_cat, term_lst in category_to_term_mapping_SIMPLE.items():
-
-        # Create dictionary for term type category
-        if term_cat not in term_type_regexes_cleaning:
-            term_type_regexes_cleaning[term_cat] = dict()
-
-        # Variable for new category dict for `term_type_regexes_cleaning`
-        term_cat_dict = term_type_regexes_cleaning[term_cat]
-
-        term_cat_SIMPLE_lst = category_to_term_mapping_SIMPLE[term_cat]
-        for term_SIMPLE in term_cat_SIMPLE_lst:
-            # term_regex = re.compile(attach_regex_to_beginning_of_terms([term_SIMPLE])[0])
-            term_regex_str_lst = attach_regex_to_beginning_of_terms([term_SIMPLE])
-            # term_cat_dict[term_SIMPLE] = {'regex_lst': [re.compile(START_REGEX + regex) for regex in term_regex_str_lst], 'extra_cleaning': False, 'terms_to_remove': []}  # TODO: Create detailed function for examples of the term to ignore, wich will have extra_cleaning=True
-            term_cat_dict[term_SIMPLE] = {'regex_lst': [re.compile(regex) for regex in term_regex_str_lst],
-                                          'extra_cleaning': False, 'terms_to_remove': [],
-                                          'context_words': []}  # TODO: Create detailed function for examples of the term to ignore, wich will have extra_cleaning=True
-
-        term_cat_COMPLEX = category_to_term_mapping_COMPLEX[term_cat]
-        for term_clean_COMPLEX, term_COMPLEX_regex_list in term_cat_COMPLEX.items():
-            # term_regex_str_lst = attach_regex_to_beginning_of_terms(term_COMPLEX_dict)
-            term_cat_dict[term_clean_COMPLEX] = {'regex_lst': [re.compile(regex) for regex in term_COMPLEX_regex_list],
-                                                 'extra_cleaning': False, 'terms_to_remove': [], 'context_words': []}
-
-        term_type_regexes_cleaning[term_cat] = term_cat_dict
-
-    return term_type_regexes_cleaning
 
 
 # covid_lp_relevant_keywords = ['block', 'review', 'police', 'issue', r'licen[cs]e', 'wage', 'revoke', 'temporary'] as of 10/11
@@ -223,6 +182,7 @@ def create_term_type_indicators(industry_df, term_type, terms_regex_dict):
                         'bullet_pts_lower'].str.contains(pattern_terms_to_remove), 0,
                     industry_df[indicator_col_name])
 
+
 def list_terms_found(row, term_cols):
     terms_found = ""
 
@@ -234,5 +194,3 @@ def list_terms_found(row, term_cols):
     if terms_found == "":
         return "None"
     return terms_found
-
-
