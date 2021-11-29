@@ -1,5 +1,5 @@
 START_REGEX = '(?<![^ .,?!;])'
-# TODO: Add "responsible exit" to practice terms after getting feedback
+# TODO: Add "responsible exit" and "contracts" to practice terms after getting feedback
 
 
 def attach_regex_to_beginning_of_terms(terms_lst, regex=START_REGEX):

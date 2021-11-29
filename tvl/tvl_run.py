@@ -65,7 +65,8 @@ if __name__ == '__main__':
     # strike
     risk_terms_regex_dict['Worker-Protest']['strike']['extra_cleaning'] = True
     risk_terms_regex_dict['Worker-Protest']['strike']['terms_to_remove'] = ["disaster(s\b|\b) strike", 'strike deal',
-                                                                            'weather strike', 'bridge strike']
+                                                                            'weather strike', 'bridge strike',
+                                                                            'joint strike fighter']
 
     # reimbursement
     risk_terms_regex_dict['Financial-Loss']['reimburse']['extra_cleaning'] = True
@@ -77,13 +78,18 @@ if __name__ == '__main__':
     risk_terms_regex_dict['Operational-Costs']['block import']['extra_cleaning'] = True
     risk_terms_regex_dict['Operational-Costs']['block import']['terms_to_remove'] = ['import bank']
 
+    # court
+    risk_terms_regex_dict['Legal-Risk']['court']['extra_cleaning'] = True
+    risk_terms_regex_dict['Legal-Risk']['court']['terms_to_remove'] = ['courtyard']
+
     # pricing pressure
     practice_terms_regex_dict['Negative-Practices']['pricing pressure']['context_words'] = ['supplier', 'factory',
                                                                                             'manufactur', 'warehouse',
                                                                                             'workshop']
 
     # all supplier context words:
-    relationship_words = ['relationship', 'purchaser', 'order', 'lead time', 'cancel([l]?(ed)|([l]?ing))? order',
+    relationship_words = ['relationship', 'purchaser', 'order', 'lead time',
+                          'cancel([l]?(ed)|([l]?ing))? order', 'cancellation',
                           'buyer', 'outsourc', 'subcontract']
     for core_term in supplier_relship_category_to_term_mapping_SIMPLE['Core']:
         supplier_relship_regex_dict['Core'][core_term]['context_words'] = relationship_words
