@@ -86,6 +86,7 @@ if __name__ == '__main__':
     practice_terms_regex_dict['Negative-Practices']['pricing pressure']['context_words'] = ['supplier', 'factory',
                                                                                             'manufactur', 'warehouse',
                                                                                             'workshop']
+    practice_terms_regex_dict['Good-Practices']['contract']['context_words'] = ['supplier']
 
     # all supplier context words:
     relationship_words = ['relationship', 'purchaser', 'order', 'lead time',

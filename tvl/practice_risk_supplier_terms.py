@@ -1,5 +1,5 @@
 START_REGEX = '(?<![^ .,?!;])'
-# TODO: Add "responsible exit" and "contracts" to practice terms after getting feedback
+# TODO: Add "contracts" to practice terms after getting feedback
 
 
 def attach_regex_to_beginning_of_terms(terms_lst, regex=START_REGEX):
@@ -122,6 +122,7 @@ practice_category_to_term_mapping_SIMPLE = {
                        'timely payments',
                        'fair terms of payment',  # Added 11/28
                        'training',  # Added 11/28
+                       'contract',  # Added 11/28
                        'union', 'worker committee'
                        ],
     'Neutral-Practices': [
@@ -145,7 +146,6 @@ practice_category_to_term_mapping_SIMPLE = {
         'informal supply chain', 'last-minute order modification',
         'unfair timing demand', 'pricing pressure',
         'poor forecasting',
-        'irresponsible exit',
         'cancellation'  # Added 11/28
     ],
     'Other': ['labor rights violation',
@@ -192,7 +192,8 @@ practice_category_to_term_mapping_COMPLEX = {
          'non[- ]?compliance(.*)code of conduct', 'code of conduct(.*)non[- ]?compliance',
          'break(.*)code of conduct',
          'broken(.*)code of conduct', 'code of conduct(.*)broken',
-         'fail(.*)code of conduct'])
+         'fail(.*)code of conduct']),
+        'responsible exit': attach_regex_to_beginning_of_terms(['responsibl[e|y](.*)exit', 'exit(.*)responsibl[e|y]'])
                        },
     'Neutral-Practices': {'corrective action': attach_regex_to_beginning_of_terms(
         ['corrective(.*)action', 'corrective(.*)plan', 'corrective(.*)measure'])
@@ -205,7 +206,8 @@ practice_category_to_term_mapping_COMPLEX = {
                                                               'order cancellation']),  # <- Added 11/28
         'overtime NEGATIVE': attach_regex_to_beginning_of_terms(
             ['(forced|unpaid|chronic|mandatory|illegal) overtime', 'long hours', 'overwork']),
-        'lead time NEGATIVE': attach_regex_to_beginning_of_terms(['short lead time', 'inadequate lead time'])
+        'lead time NEGATIVE': attach_regex_to_beginning_of_terms(['short lead time', 'inadequate lead time']),
+        'irresponsible exit': attach_regex_to_beginning_of_terms(['irresponsibl[e|y](.*)exit', 'exit(.*)irresponsibl[e|y]'])
     },
     'Other': {
         'ringfence labor': attach_regex_to_beginning_of_terms(['ringfence labo[u]?r']),  # Added 11/28

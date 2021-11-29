@@ -68,7 +68,8 @@ def get_industry_level_practice_breakdown(labeled_industry_articles, industry_to
         'wage': 'Wages',
         'lead time': 'Negative-Practices',
         'purchasing': 'Other',
-        'representation': 'Other'
+        'representation': 'Other',
+        'responsible exit': 'Good-Practices'
     }
     for subterm, category in subterm_category_practice.items():
         remove_dupe_counts_of_practice_term(subterm, category, col_name_article_or_event,
