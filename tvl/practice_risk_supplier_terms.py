@@ -1,4 +1,5 @@
 START_REGEX = '(?<![^ .,?!;])'
+# TODO: Add "responsible exit" to practice terms after getting feedback
 
 
 def attach_regex_to_beginning_of_terms(terms_lst, regex=START_REGEX):
@@ -35,7 +36,9 @@ risk_category_to_term_mapping_SIMPLE = {
     "Modern-Slavery": ['modern slavery', 'debt bondage', 'human traffic'],
 
     'Other': ['alleg', 'accus', 'exploit', 'expose', 'investigat',
-              'police', 'enforcement', 'security force', 'inspection', 'inspector'],
+              'police', 'enforcement', 'security force', 'inspection', 'inspector',
+              'purchasing', 'purchasing practices',  # Added 11/28
+              ],
 
     'Other-RK': ['scandal', 'government action', 'share price', 'share value',
                  'investment',
@@ -118,6 +121,8 @@ practice_category_to_term_mapping_SIMPLE = {
                        'transparency', 'traceability', 'visibility',
                        'supply chain map',
                        'timely payments',
+                       'fair terms of payment',  # Added 11/28
+                       'training',  # Added 11/28
                        'union', 'worker committee'
                        ],
     'Neutral-Practices': [
@@ -141,8 +146,12 @@ practice_category_to_term_mapping_SIMPLE = {
         'informal supply chain', 'last-minute order modification',
         'unfair timing demand', 'pricing pressure',
         'poor forecasting',
-        'irresponsible exit'],
-    'Other': ['labor rights violation']
+        'irresponsible exit',
+        'cancellation'  # Added 11/28
+    ],
+    'Other': ['labor rights violation',
+              'worker representation', 'representation',  # Added 11/28
+              ]
 }
 
 practice_category_to_term_mapping_COMPLEX = {
@@ -192,12 +201,16 @@ practice_category_to_term_mapping_COMPLEX = {
         # 'piece work': attach_regex_to_beginning_of_terms(['piece work', 'piece[- ]rate']),
         # 'production target': attach_regex_to_beginning_of_terms(['production target', 'production quota']),
         'hour violation': attach_regex_to_beginning_of_terms(['hour (law )?violation']),
-        'canceled order': attach_regex_to_beginning_of_terms(['cancel([l]?(ed)|([l]?ing))? order']),
+        'canceled order': attach_regex_to_beginning_of_terms(['cancel([l]?(ed)|([l]?ing))? order',
+                                                              'order cancellation']),  # <- Added 11/28
         'overtime NEGATIVE': attach_regex_to_beginning_of_terms(
             ['(forced|unpaid|chronic|mandatory|illegal) overtime', 'long hours', 'overwork']),
         'lead time NEGATIVE': attach_regex_to_beginning_of_terms(['short lead time', 'inadequate lead time'])
     },
-    'Other': {}
+    'Other': {
+        'ringfence labor': attach_regex_to_beginning_of_terms(['ringfence labo[u]?r']),  # Added 11/28
+        'labor costs': attach_regex_to_beginning_of_terms(['labo[u]?r cost']),  # Added 11/28
+    }
 }
 
 # Supplier relationship terms
