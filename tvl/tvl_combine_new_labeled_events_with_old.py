@@ -14,7 +14,7 @@ def parse_cmd_line_args():
 if __name__ == '__main__':
     args = parse_cmd_line_args()
     old_df = pd.read_excel(args.old_df_path)
-    new_df = pd.read_excel(args.new_df_path)
+    new_df = pd.read_csv(args.new_df_path)
 
     old_df_drop_cols = [col for col in list(old_df.columns) if col not in ['INDUSTRY',
                                                                            'Company',
