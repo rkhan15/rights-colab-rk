@@ -1,0 +1,73 @@
+INDUSTRY_ID,INDUSTRY_NAME,SECTOR_ID,SUBSECTOR_ID,TVL Industry Abbrev,SECTOR_FULL_NAME
+CG-AA,"Apparel, Accessories & Footwear",CG,CG.1,"Apparel,Accessories & Foo",Consumer Goods
+CG-AM,Appliance Manufacturing,CG,CG.2,ApplianceManufacturing,Consumer Goods
+CG-BF,Building Products & Furnishings,CG,CG.2,BuildingProducts & Furnis,Consumer Goods
+CG-HP,Household & Personal Products,CG,CG.2,Household& Personal Produ,Consumer Goods
+CG-MR,Multiline and Specialty Retailers & Distributors,CG,CG.3,Multilineand Specialty Re,Consumer Goods
+CG-TS,Toys & Sporting Goods,CG,CG.2,Toys& Sporting Goods,Consumer Goods
+EM-CM,Construction Materials,EM,EM.2,ConstructionMaterials,Extractives & Minerals Processing
+EM-CO,Coal Operations,EM,EM.1,CoalOperations,Extractives & Minerals Processing
+EM-IS,Iron & Steel Producers,EM,EM.3,Iron& Steel Producers,Extractives & Minerals Processing
+EM-MM,Metals & Mining,EM,EM.3,Metals& Mining,Extractives & Minerals Processing
+FB-AB,Alcoholic Beverages,FB,FB.2,AlcoholicBeverages,Food & Beverage
+FB-AG,Agricultural Products,FB,FB.1,AgriculturalProducts,Food & Beverage
+FB-FR,Food Retailers & Distributors,FB,FB.3,FoodRetailers & Distribut,Food & Beverage
+FB-MP,"Meat, Poultry & Dairy",FB,FB.1,"Meat,Poultry & Dairy",Food & Beverage
+FB-NB,Non-Alcoholic Beverages,FB,FB.2,Non-AlcoholicBeverages,Food & Beverage
+FB-PF,Processed Foods,FB,FB.1,ProcessedFoods,Food & Beverage
+FB-RN,Restaurants,FB,FB.4,Restaurants,Food & Beverage
+FB-TB,Tobacco,FB,FB.5,Tobacco,Food & Beverage
+FN-AC,Asset Management & Custody Activities,FN,FN.1,AssetManagement & Custody,Financials
+FN-CB,Commercial Banks,FN,FN.2,CommercialBanks,Financials
+FN-CF,Consumer Finance,FN,FN.2,ConsumerFinance,Financials
+FN-EX,Security & Commodity Exchanges,FN,FN.1,Security& Commodity Excha,Financials
+FN-IB,Investment Banking & Brokerage,FN,FN.1,InvestmentBanking & Broke,Financials
+FN-IN,Insurance,FN,FN.3,Insurance,Financials
+FN-MF,Mortgage Finance,FN,FN.2,MortgageFinance,Financials
+HC-BP,Biotechnology & Pharmaceuticals,HC,HC.1,Biotechnology& Pharmaceut,Health Care
+HC-DI,Health Care Distributors,HC,HC.3,HealthCare Distributors,Health Care
+HC-DR,Drug Retailers,HC,HC.2,DrugRetailers,Health Care
+HC-DY,Health Care Delivery,HC,HC.3,HealthCare Delivery,Health Care
+HC-MC,Managed Care,HC,HC.3,ManagedCare,Health Care
+HC-MS,Medical Equipment & Supplies,HC,HC.4,MedicalEquipment & Suppli,Health Care
+IF-EN,Engineering & Construction Services,IF,IF.2,Engineering& Construction,Infrastructure
+IF-EU,Electric Utilities & Power Generators,IF,IF.1,ElectricUtilities & Power,Infrastructure
+IF-GU,Gas Utilities & Distributors,IF,IF.1,GasUtilities & Distributo,Infrastructure
+IF-HB,Home Builders,IF,IF.3,HomeBuilders,Infrastructure
+IF-RE,Real Estate,IF,IF.3,RealEstate,Infrastructure
+IF-RS,Real Estate Services,IF,IF.3,RealEstate Services,Infrastructure
+IF-WM,Waste Management,IF,IF.4,WasteManagement,Infrastructure
+IF-WU,Water Utilities & Services,IF,IF.1,WaterUtilities & Services,Infrastructure
+RR-BI,Biofuels,RR,RR.1,Biofuels,Renewable Resources & Alternative Energy
+RR-FC,Fuel Cells & Industrial Batteries,RR,RR.1,FuelCells & Industrial Ba,Renewable Resources & Alternative Energy
+RR-FM,Forestry Management,RR,RR.2,ForestryManagement,Renewable Resources & Alternative Energy
+RR-PP,Pulp & Paper Products,RR,RR.2,Pulp& Paper Products,Renewable Resources & Alternative Energy
+RR-ST,Solar Technology & Project Developers,RR,RR.1,SolarTechnology & Project,Renewable Resources & Alternative Energy
+RR-WT,Wind Technology & Project Developers,RR,RR.1,WindTechnology & Project ,Renewable Resources & Alternative Energy
+RT-AE,Aerospace & Defense,RT,RT.1,Aerospace& Defense,Resource Transformation
+RT-CH,Chemicals,RT,RT.2,Chemicals,Resource Transformation
+RT-CP,Containers & Packaging,RT,RT.1,Containers& Packaging,Resource Transformation
+RT-EE,Electrical & Electronic Equipment,RT,RT.1,Electrical& Electronic Eq,Resource Transformation
+RT-IG,Industrial Machinery & Goods,RT,RT.1,IndustrialMachinery & Goo,Resource Transformation
+SV-AD,Advertising & Marketing,SV,SV.1,Advertising& Marketing,Services
+SV-CA,Casinos & Gaming,SV,SV.2,Casinos& Gaming,Services
+SV-ED,Education,SV,SV.3,Education,Services
+SV-HL,Hotels & Lodging,SV,SV.2,Hotels& Lodging,Services
+SV-LF,Leisure Facilities,SV,SV.2,LeisureFacilities,Services
+SV-ME,Media & Entertainment,SV,SV.1,Media& Entertainment,Services
+SV-PS,Professional & Commercial Services,SV,SV.3,Professional& Commercial,Services
+TC-ES,Electronic Manufacturing Services & Original Design Manufacturing,TC,TC.1,ElectronicManufacturing S,Technology & Communications
+TC-HW,Hardware,TC,TC.1,Hardware,Technology & Communications
+TC-IM,Internet Media & Services,TC,TC.2,InternetMedia & Services,Technology & Communications
+TC-SC,Semiconductors,TC,TC.3,Semiconductors,Technology & Communications
+TC-SI,Software & IT Services,TC,TC.1,Software& IT Services,Technology & Communications
+TC-TL,Telecommunication Services,TC,TC.4,TelecommunicationServices,Technology & Communications
+TR-AF,Air Freight & Logistics,TR,TR.1,AirFreight & Logistics,Transportation
+TR-AL,Airlines,TR,TR.1,Airlines,Transportation
+TR-AP,Auto Parts,TR,TR.2,AutoParts,Transportation
+TR-AU,Automobiles,TR,TR.2,Automobiles,Transportation
+TR-CL,Cruise Lines,TR,TR.3,CruiseLines,Transportation
+TR-CR,Car Rental & Leasing,TR,TR.2,CarRental & Leasing,Transportation
+TR-MT,Marine Transportation,TR,TR.3,MarineTransportation,Transportation
+TR-RA,Rail Transportation,TR,TR.4,RailTransportation,Transportation
+TR-RO,Road Transportation,TR,TR.4,RoadTransportation,Transportation
