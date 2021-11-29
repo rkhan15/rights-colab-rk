@@ -53,13 +53,13 @@ def get_industry_level_practice_breakdown(labeled_industry_articles, industry_to
                 else:
                     practice_articles_or_events[practice_term_col].add(row['TVL ID'])
 
-    col_name_article_or_event = "Article count of practice term" if article_level else "Event count of practice term"
-    df_practice_articles_or_events = pd.DataFrame(columns=['Practice term', col_name_article_or_event])
+    col_name_pterm_article_or_event = "Article count of practice term" if article_level else "Event count of practice term"
+    df_practice_articles_or_events = pd.DataFrame(columns=['Practice term', col_name_pterm_article_or_event])
     for p_term, set_IDs in practice_articles_or_events.items():
         df_practice_articles_or_events = df_practice_articles_or_events.append(
-            {'Practice term': p_term, col_name_article_or_event: len(set_IDs)}, ignore_index=True
+            {'Practice term': p_term, col_name_pterm_article_or_event: len(set_IDs)}, ignore_index=True
         )
-    df_practice_articles_or_events = df_practice_articles_or_events.sort_values(by=col_name_article_or_event,
+    df_practice_articles_or_events = df_practice_articles_or_events.sort_values(by=col_name_pterm_article_or_event,
                                                                                 ascending=False)
 
     # Remove counts of terms containing another term from the term's category itself
@@ -72,7 +72,7 @@ def get_industry_level_practice_breakdown(labeled_industry_articles, industry_to
         'responsible exit': 'Good-Practices'
     }
     for subterm, category in subterm_category_practice.items():
-        remove_dupe_counts_of_practice_term(subterm, category, col_name_article_or_event,
+        remove_dupe_counts_of_practice_term(subterm, category, col_name_pterm_article_or_event,
                                             df_practice_articles_or_events)
 
     # Get totals for each practice term's co-occurrences with a risk term, regardless of industry
@@ -101,15 +101,16 @@ def get_industry_level_practice_breakdown(labeled_industry_articles, industry_to
                         else:
                             practice_risk_articles_or_events[practice_term_col][risk_term_col].add(row['TVL ID'])
 
+    col_name_pterm_rterm_article_or_event = "Article count of co-occurrence" if article_level else "Event count of co-occurrence"
     df_practice_risk_articles_or_events = pd.DataFrame(
-        columns=['Practice term', 'Risk term', 'Count of co-occurrence'])
+        columns=['Practice term', 'Risk term', col_name_pterm_rterm_article_or_event])
     for p_term, r_terms in practice_risk_articles_or_events.items():
         for r_term, set_IDs in r_terms.items():
             df_practice_risk_articles_or_events = df_practice_risk_articles_or_events.append(
-                {'Practice term': p_term, 'Risk term': r_term, 'Count of co-occurrence': len(set_IDs)},
+                {'Practice term': p_term, 'Risk term': r_term, col_name_pterm_rterm_article_or_event: len(set_IDs)},
                 ignore_index=True)
     df_practice_risk_articles_or_events = df_practice_risk_articles_or_events.sort_values(
-        by='Count of co-occurrence', ascending=False)
+        by=col_name_pterm_rterm_article_or_event, ascending=False)
 
     # TODO: Add to this dict as needed for future terms
     subterm_category_risk = {
@@ -117,22 +118,22 @@ def get_industry_level_practice_breakdown(labeled_industry_articles, industry_to
     }
     for subterm, category in subterm_category_risk.items():
         remove_dupe_counts_of_risk_term(
-            subterm, category, col_name_article_or_event, df_practice_risk_articles_or_events)
+            subterm, category, col_name_pterm_rterm_article_or_event, df_practice_risk_articles_or_events)
 
     if not generate_merge:
         return df_practice_articles_or_events, df_practice_risk_articles_or_events, None, None
 
     merge_practice_counts_with_risk_cooccurs = pd.merge(
         df_practice_articles_or_events, df_practice_risk_articles_or_events, how='left', on='Practice term')
-    merge_practice_counts_with_risk_cooccurs['Count of practice term'] = merge_practice_counts_with_risk_cooccurs[
-        'Count of practice term'].astype(float)
-    merge_practice_counts_with_risk_cooccurs['Count of co-occurrences'] = merge_practice_counts_with_risk_cooccurs[
-        'Count of co-occurrences'].astype(float)
+    merge_practice_counts_with_risk_cooccurs[col_name_pterm_article_or_event] = merge_practice_counts_with_risk_cooccurs[
+        col_name_pterm_article_or_event].astype(float)
+    merge_practice_counts_with_risk_cooccurs[col_name_pterm_rterm_article_or_event] = merge_practice_counts_with_risk_cooccurs[
+        col_name_pterm_rterm_article_or_event].astype(float)
     merge_practice_counts_with_risk_cooccurs['Co-occurrences over Total Practice count'] = 0
     merge_practice_counts_with_risk_cooccurs['Co-occurrences over Total Practice count'] = np.where(
-        merge_practice_counts_with_risk_cooccurs['Count of practice term'] > 0,
-        merge_practice_counts_with_risk_cooccurs['Count of co-occurrences'] / merge_practice_counts_with_risk_cooccurs[
-            'Count of practice term'], 0)
+        merge_practice_counts_with_risk_cooccurs[col_name_pterm_article_or_event] > 0,
+        merge_practice_counts_with_risk_cooccurs[col_name_pterm_rterm_article_or_event] / merge_practice_counts_with_risk_cooccurs[
+            col_name_pterm_article_or_event], 0)
     merge_practice_counts_with_risk_cooccurs = merge_practice_counts_with_risk_cooccurs.sort_values(
         by='Co-occurrences over Total Practice count', ascending=False)
 
@@ -164,7 +165,7 @@ def get_industry_level_practice_breakdown(labeled_industry_articles, industry_to
 
 
 def remove_dupe_counts_of_practice_term(practice_term_to_check, category_practice_term_to_check,
-                                        col_name_article_or_event, df_practice_articles_or_events):
+                                        col_name_pterm_article_or_event, df_practice_articles_or_events):
     # Example: Remove counts of terms containing "wage" from "wage_PRACTICE_Wages" itself
     all_pterms_containing_term = df_practice_articles_or_events[
         df_practice_articles_or_events['Practice term'].str.contains(practice_term_to_check)]
@@ -174,19 +175,19 @@ def remove_dupe_counts_of_practice_term(practice_term_to_check, category_practic
             pterm = row['Practice term']
             if pterm.split('_')[0] == practice_term_to_check:
                 continue
-            count_to_subtract_from_term += int(row[col_name_article_or_event])
+            count_to_subtract_from_term += int(row[col_name_pterm_article_or_event])
 
         term_idx = \
             df_practice_articles_or_events.index[
                 df_practice_articles_or_events[
                     'Practice term'] == f'{practice_term_to_check}_PRACTICE_{category_practice_term_to_check}'].tolist()[
                 0]
-        df_practice_articles_or_events.loc[term_idx][col_name_article_or_event] = \
+        df_practice_articles_or_events.loc[term_idx][col_name_pterm_article_or_event] = \
             df_practice_articles_or_events.loc[term_idx][
-                col_name_article_or_event] - count_to_subtract_from_term
+                col_name_pterm_article_or_event] - count_to_subtract_from_term
 
 
-def remove_dupe_counts_of_risk_term(risk_term_to_check, category_risk_term_to_check, col_name_article_or_event,
+def remove_dupe_counts_of_risk_term(risk_term_to_check, category_risk_term_to_check, col_name_pterm_rterm_article_or_event,
                                     df_practice_risk_articles_or_events):
     # Same as above function but for risk terms
     all_rterms_containing_term = df_practice_risk_articles_or_events[
@@ -197,16 +198,16 @@ def remove_dupe_counts_of_risk_term(risk_term_to_check, category_risk_term_to_ch
             rterm = row['Risk term']
             if rterm.split('_')[0] == risk_term_to_check:
                 continue
-            count_to_subtract_from_term += int(row[col_name_article_or_event])
+            count_to_subtract_from_term += int(row[col_name_pterm_rterm_article_or_event])
 
         term_idx = \
             df_practice_risk_articles_or_events.index[
                 df_practice_risk_articles_or_events[
                     'Risk term'] == f'{risk_term_to_check}_RISK_{category_risk_term_to_check}'].tolist()[
                 0]
-        df_practice_risk_articles_or_events.loc[term_idx][col_name_article_or_event] = \
+        df_practice_risk_articles_or_events.loc[term_idx][col_name_pterm_rterm_article_or_event] = \
             df_practice_risk_articles_or_events.loc[term_idx][
-                col_name_article_or_event] - count_to_subtract_from_term
+                col_name_pterm_rterm_article_or_event] - count_to_subtract_from_term
 
 
 if __name__ == '__main__':
