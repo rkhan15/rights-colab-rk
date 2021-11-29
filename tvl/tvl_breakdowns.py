@@ -236,20 +236,40 @@ if __name__ == '__main__':
     labeled_industry_articles = labeled_industry_articles.set_index(
         ['Company', 'INDUSTRY', 'TVL ID']).reset_index().reset_index()
 
-    df_practice_articles_or_events, df_practice_risk_articles_or_events, merge_practice_counts_with_risk_cooccurs, fig = get_industry_level_practice_breakdown(
-        labeled_industry_articles, industry_to_sector_map, article_level=args.article_level,
-        generate_merge=args.generate_merge, generate_heatmap=args.generate_heatmap)
+    # Initialize dataframe for practice terms by industry/sector
+    col_name_pterm_article_or_event = "Article count of practice term" if args.article_level else "Event count of practice term"
+    df_all_industry_practices = pd.DataFrame(
+        columns=['SECTOR', 'INDUSTRY', 'Practice term', 'Risk term', col_name_pterm_article_or_event])
+
+    # Initialize dataframe for practice-risk co-occurrences by industry/sector
+    col_name_pterm_rterm_article_or_event = "Article count of co-occurrence" if args.article_level else "Event count of co-occurrence"
+    df_all_industry_cooccurs = pd.DataFrame(
+        columns=['SECTOR', 'INDUSTRY', 'Practice term', 'Risk term', col_name_pterm_rterm_article_or_event])
+
+    for industry, sector in dict_industry_to_sector_map.items():
+        df_practice_articles_or_events, df_practice_risk_articles_or_events, merge_practice_counts_with_risk_cooccurs, fig = get_industry_level_practice_breakdown(
+            labeled_industry_articles, industry_to_sector_map, article_level=args.article_level,
+            generate_merge=args.generate_merge, generate_heatmap=args.generate_heatmap, industry=industry)
+
+        df_practice_articles_or_events.insert(loc=0, column='INDUSTRY', value=industry)
+        df_practice_articles_or_events.insert(loc=0, column='SECTOR', value=sector)
+        df_all_industry_practices = df_all_industry_practices.append(df_practice_articles_or_events, ignore_index=True)
+
+        df_practice_risk_articles_or_events.insert(loc=0, column='INDUSTRY', value=industry)
+        df_practice_risk_articles_or_events.insert(loc=0, column='SECTOR', value=sector)
+        df_all_industry_cooccurs = df_all_industry_cooccurs.append(df_practice_risk_articles_or_events,
+                                                                   ignore_index=True)
 
     article_level_abbrev = "Article_Level" if args.article_level else "Event_Level"
-    df_practice_articles_or_events.to_csv(
+    df_all_industry_practices.to_csv(
         f'{datetime.datetime.today().month}_{datetime.datetime.today().day}-{args.abbrev}-Practice_{article_level_abbrev}_Breakdown.csv',
         index=False)
-    df_practice_risk_articles_or_events.to_csv(
+    df_all_industry_cooccurs.to_csv(
         f'{datetime.datetime.today().month}_{datetime.datetime.today().day}-{args.abbrev}-Practice_Risk_Cooccurrences_{article_level_abbrev}_Breakdown.csv',
         index=False)
-    if args.generate_merge:
-        merge_practice_counts_with_risk_cooccurs.to_csv(
-            f'{datetime.datetime.today().month}_{datetime.datetime.today().day}-{args.abbrev}-Practice_Cooccurs_Merge_{article_level_abbrev}_Breakdown.csv',
-            index=False)
-    if args.generate_heatmap:
-        fig.write_image(f"{datetime.datetime.today().month}_{datetime.datetime.today().day}-{args.abbrev}-Practice_Cooccurs_Merge_{article_level_abbrev}_Breakdown.png")
+    # if args.generate_merge:
+    #     merge_practice_counts_with_risk_cooccurs.to_csv(
+    #         f'{datetime.datetime.today().month}_{datetime.datetime.today().day}-{args.abbrev}-Practice_Cooccurs_Merge_{article_level_abbrev}_Breakdown.csv',
+    #         index=False)
+    # if args.generate_heatmap:
+    #     fig.write_image(f"{datetime.datetime.today().month}_{datetime.datetime.today().day}-{args.abbrev}-Practice_Cooccurs_Merge_{article_level_abbrev}_Breakdown.png")
