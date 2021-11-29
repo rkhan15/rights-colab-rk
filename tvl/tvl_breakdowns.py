@@ -116,7 +116,8 @@ def get_industry_level_practice_breakdown(labeled_industry_articles, industry_to
         'disruption': 'Operational-Costs',
     }
     for subterm, category in subterm_category_risk.items():
-        remove_dupe_counts_of_risk_term(subterm, category, col_name_article_or_event, df_practice_articles_or_events)
+        remove_dupe_counts_of_risk_term(
+            subterm, category, col_name_article_or_event, df_practice_risk_articles_or_events)
 
     if not generate_merge:
         return df_practice_articles_or_events, df_practice_risk_articles_or_events, None, None

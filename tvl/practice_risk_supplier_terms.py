@@ -1,3 +1,5 @@
+# SUPPLY CHAIN MGMT-RELATED TERMS ONLY
+
 START_REGEX = '(?<![^ .,?!;])'
 
 
@@ -72,7 +74,7 @@ risk_category_to_term_mapping_COMPLEX = {
 practice_category_to_term_mapping_SIMPLE = {
     'Wages': [
         'wage',
-        'wage theft',
+        'wage theft', 'stolen wage',
         'living wage'],
     'Immigrants': [],
     'Precarious-Work': [
@@ -199,12 +201,12 @@ practice_category_to_term_mapping_COMPLEX = {
     },
     'Negative-Practices': {
         # 'piece work': attach_regex_to_beginning_of_terms(['piece work', 'piece[- ]rate']),
-        # 'production target': attach_regex_to_beginning_of_terms(['production target', 'production quota']),
+        'production target': attach_regex_to_beginning_of_terms(['production target', 'production quota', 'strict quota']),
         'hour violation': attach_regex_to_beginning_of_terms(['hour (law )?violation']),
         'canceled order': attach_regex_to_beginning_of_terms(['cancel([l]?(ed)|([l]?ing))? order',
                                                               'order cancellation']),  # <- Added 11/28
         'overtime NEGATIVE': attach_regex_to_beginning_of_terms(
-            ['(forced|unpaid|chronic|mandatory|illegal) overtime', 'long hours', 'overwork']),
+            ['(forced|unpaid|chronic|mandatory|illegal) overtime', 'long hours', 'overwork', 'off the clock']),
         'lead time NEGATIVE': attach_regex_to_beginning_of_terms(['short lead time', 'inadequate lead time']),
         'irresponsible exit': attach_regex_to_beginning_of_terms(['irresponsibl[e|y](.*)exit', 'exit(.*)irresponsibl[e|y]'])
     },
