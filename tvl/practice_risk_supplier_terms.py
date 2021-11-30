@@ -157,8 +157,8 @@ practice_category_to_term_mapping_SIMPLE = {
                        'supply chain map',
                        'timely payments',
                        'fair terms of payment',  # Added 11/28
-                       'training',  # Added 11/28
-                       'contract',  # Added 11/28
+                       # 'training',  # TODO: GET BACK TO THIS AFTER THE FALL # Added 11/28
+                       # 'contract',  # TODO: GET BACK TO THIS AFTER THE FALL # Added 11/28
                        'union', 'worker committee'
                        ],
     'Neutral-Practices': [
@@ -215,8 +215,12 @@ practice_category_to_term_mapping_COMPLEX = {
     },
     'Work-Conditions': {'collective bargaining agreement': attach_regex_to_beginning_of_terms(
         ['collective bargaining agreement', 'cba[s]?\W']),
+                        # TODO: get back to this
                         'turnover': attach_regex_to_beginning_of_terms(
-                            ['high turnover', 'worker turnover', 'employee turnover', 'turnover rate', 'voluntary turnover']),  # TODO: get back to this
+                            ['high turnover', 'worker turnover', 'employee turnover', 'turnover rate',
+                             'voluntary turnover'  # because of START_REGEX, "involuntary turnover" is automatically left out
+                             ]
+                        ),
                         'unsafe conditions': attach_regex_to_beginning_of_terms(
                             ['unsafe(.*)condition', 'hazard(.*)condition', 'working conditions',
                              'deteriorating(.*)condition']),
@@ -326,6 +330,7 @@ risk_terms_regex_dict['Legal-Risk']['court']['terms_to_remove'] = ['courtyard']
 practice_terms_regex_dict['Negative-Practices']['pricing pressure']['context_words'] = ['supplier', 'factory',
                                                                                         'manufactur', 'warehouse',
                                                                                         'workshop']
+# contract
 practice_terms_regex_dict['Good-Practices']['contract']['context_words'] = ['supplier']
 
 # all supplier context words:
