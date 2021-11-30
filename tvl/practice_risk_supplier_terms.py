@@ -215,12 +215,13 @@ practice_category_to_term_mapping_COMPLEX = {
     },
     'Work-Conditions': {'collective bargaining agreement': attach_regex_to_beginning_of_terms(
         ['collective bargaining agreement', 'cba[s]?\W']),
-                        # TODO: get back to this
-                        'turnover': attach_regex_to_beginning_of_terms(
-                            ['high turnover', 'worker turnover', 'employee turnover', 'turnover rate',
-                             'voluntary turnover'  # because of START_REGEX, "involuntary turnover" is automatically left out
-                             ]
-                        ),
+                        # TODO: get back to turnover
+                        # 'turnover': attach_regex_to_beginning_of_terms(
+                        #     ['high turnover', 'worker turnover', 'employee turnover', 'turnover rate',
+                        #      'voluntary turnover',  # because of START_REGEX, "involuntary turnover" is automatically left out
+                        #      'quit rate',
+                        #      ]
+                        # ),
                         'unsafe conditions': attach_regex_to_beginning_of_terms(
                             ['unsafe(.*)condition', 'hazard(.*)condition', 'working conditions',
                              'deteriorating(.*)condition']),
@@ -331,7 +332,7 @@ practice_terms_regex_dict['Negative-Practices']['pricing pressure']['context_wor
                                                                                         'manufactur', 'warehouse',
                                                                                         'workshop']
 # contract
-practice_terms_regex_dict['Good-Practices']['contract']['context_words'] = ['supplier']
+# practice_terms_regex_dict['Good-Practices']['contract']['context_words'] = ['supplier']
 
 # all supplier context words:
 relationship_words = ['relationship', 'purchaser', 'order', 'lead time',
