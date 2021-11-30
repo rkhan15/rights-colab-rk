@@ -232,9 +232,14 @@ if __name__ == '__main__':
     risk_term_cols = [col for col in list(labeled_industry_articles.columns) if
                       'RISK' in col and col not in unwanted_cols]
 
-    # Create index column at the Company-Industry-TVL_ID level
-    labeled_industry_articles = labeled_industry_articles.set_index(
-        ['Company', 'INDUSTRY', 'TVL ID']).reset_index().reset_index()
+    # # Create index column at the Company-Industry-TVL_ID level
+    # labeled_industry_articles = labeled_industry_articles.set_index(
+    #     ['Company', 'INDUSTRY', 'TVL ID']).reset_index().reset_index()
+
+    # The articles do not contain duplicates at the industry level (from tvl_run.py)
+    # (this way, we don't double-count an article within the same industry)
+    # So, we're creating an index for each article here, since each article is already unique:
+    labeled_industry_articles = labeled_industry_articles.reset_index()
 
     # Initialize dataframe for practice terms by industry/sector
     col_name_pterm_article_or_event = "Article count of practice term" if args.article_level else "Event count of practice term"
