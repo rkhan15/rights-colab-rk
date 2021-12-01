@@ -219,7 +219,7 @@ practice_category_to_term_mapping_COMPLEX = {
                         'turnover': attach_regex_to_beginning_of_terms(
                             ['high turnover', 'worker turnover', 'employee turnover', 'turnover rate',
                              'voluntary turnover',  # because of START_REGEX, "involuntary turnover" is automatically left out
-                             'quit rate',
+                             'quit[s]? rate', 'rate of quit'
                              ]
                         ),
                         'unsafe conditions': attach_regex_to_beginning_of_terms(

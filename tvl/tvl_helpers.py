@@ -71,7 +71,7 @@ def label_all_industry_events_with_term_indicators(
     covid_keywords = ['covid', 'coronavirus', 'pandemic']
     # TODO: TURNOVER_CHECK
     TURNOVER_keywords = ['high turnover', 'worker turnover', 'employee turnover', 'turnover rate', 'voluntary turnover',
-                         'quit rate']
+                         'quit[s]? rate', 'rate of quit']
     pattern_covid = '|'.join(covid_keywords)
 
     # Get all events in one df, by industry
