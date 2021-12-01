@@ -134,14 +134,6 @@ def label_all_industry_events_with_term_indicators(
                                                              axis=1)
         industry_df['marked_labor_relevant_ind'] = industry_df['labor_keyword_ind']
 
-        # TODO: TURNOVER_CHECK
-        for keyword in TURNOVER_keywords:
-            keyword_regex = re.compile(f'{START_REGEX}{keyword}')
-            industry_df[f'{keyword}_ind'] = np.where(
-                industry_df['headline_lower'].str.contains(keyword_regex) | industry_df[
-                    'bullet_pts_lower'].str.contains(keyword_regex),
-                1, 0)
-
         # Apply COVID-specific labor practice-relevance heuristic ONLY to articles marked as lp-relevant above
         mask_marked_as_lp_relevant = (industry_df['labor_keyword_ind'] == 1)
         mask_mentions_covid = (industry_df['headline_lower'].str.contains(pattern_covid) | industry_df[

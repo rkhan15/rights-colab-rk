@@ -216,12 +216,12 @@ practice_category_to_term_mapping_COMPLEX = {
     'Work-Conditions': {'collective bargaining agreement': attach_regex_to_beginning_of_terms(
         ['collective bargaining agreement', 'cba[s]?\W']),
                         # TODO: get back to turnover
-                        'turnover': attach_regex_to_beginning_of_terms(
-                            ['high turnover', 'worker turnover', 'employee turnover', 'turnover rate',
-                             'voluntary turnover',  # because of START_REGEX, "involuntary turnover" is automatically left out
-                             'quit rate',
-                             ]
-                        ),
+                        # 'turnover': attach_regex_to_beginning_of_terms(
+                        #     ['high turnover', 'worker turnover', 'employee turnover', 'turnover rate',
+                        #      'voluntary turnover',  # because of START_REGEX, "involuntary turnover" is automatically left out
+                        #      'quit[s]? rate', 'rate of quit'
+                        #      ]
+                        # ),
                         'unsafe conditions': attach_regex_to_beginning_of_terms(
                             ['unsafe(.*)condition', 'hazard(.*)condition', 'working conditions',
                              'deteriorating(.*)condition']),
