@@ -69,6 +69,9 @@ def label_all_industry_events_with_term_indicators(
     # No need to query for labor-practice keywords for other GIC work
     labor_keywords = [r'labo[u]r', 'wage', 'worker']
     covid_keywords = ['covid', 'coronavirus', 'pandemic']
+    # TODO: TURNOVER_CHECK
+    TURNOVER_keywords = ['high turnover', 'worker turnover', 'employee turnover', 'turnover rate', 'voluntary turnover',
+                         'quit rate']
     pattern_covid = '|'.join(covid_keywords)
 
     # Get all events in one df, by industry
@@ -130,6 +133,14 @@ def label_all_industry_events_with_term_indicators(
         industry_df['labor_keyword_ind'] = industry_df.apply(lambda row: get_labor_indicator_v2(row, labor_keywords),
                                                              axis=1)
         industry_df['marked_labor_relevant_ind'] = industry_df['labor_keyword_ind']
+
+        # TODO: TURNOVER_CHECK
+        for keyword in TURNOVER_keywords:
+            keyword_regex = re.compile(f'{START_REGEX}{keyword}')
+            industry_df[f'{keyword}_ind'] = np.where(
+                industry_df['headline_lower'].str.contains(keyword_regex) | industry_df[
+                    'bullet_pts_lower'].str.contains(keyword_regex),
+                1, 0)
 
         # Apply COVID-specific labor practice-relevance heuristic ONLY to articles marked as lp-relevant above
         mask_marked_as_lp_relevant = (industry_df['labor_keyword_ind'] == 1)
