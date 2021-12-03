@@ -101,7 +101,14 @@ risk_category_to_term_mapping_COMPLEX = {
         'forced labor': attach_regex_to_beginning_of_terms(['(forced|slave) labo[u]?r']),
         'child labor': attach_regex_to_beginning_of_terms(['child labo[u]?r', 'child slave']),
     },
-    'Other': {},
+    'Other': {
+            'turnover': attach_regex_to_beginning_of_terms(
+                ['high turnover', 'worker turnover', 'employee turnover', 'turnover rate',
+                 'voluntary turnover',  # because of START_REGEX, "involuntary turnover" is automatically left out
+                 'quit[s]? rate', 'rate of quit'
+                 ]
+            ),
+        },
     'Other-RK': {'negative return': attach_regex_to_beginning_of_terms(['negative(.*)return']),
                  'long-term': attach_regex_to_beginning_of_terms(['long[- ]?term'])}
 }
@@ -216,13 +223,6 @@ practice_category_to_term_mapping_COMPLEX = {
     },
     'Work-Conditions': {'collective bargaining agreement': attach_regex_to_beginning_of_terms(
         ['collective bargaining agreement', 'cba[s]?\W']),
-                        # TODO: get back to turnover
-                        # 'turnover': attach_regex_to_beginning_of_terms(
-                        #     ['high turnover', 'worker turnover', 'employee turnover', 'turnover rate',
-                        #      'voluntary turnover',  # because of START_REGEX, "involuntary turnover" is automatically left out
-                        #      'quit[s]? rate', 'rate of quit'
-                        #      ]
-                        # ),
                         'unsafe conditions': attach_regex_to_beginning_of_terms(
                             ['unsafe(.*)condition', 'hazard(.*)condition', 'working conditions',
                              'deteriorating(.*)condition']),
