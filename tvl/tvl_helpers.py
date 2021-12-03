@@ -76,7 +76,8 @@ def label_all_industry_events_with_term_indicators(
 
     # Get all events in one df, by industry
     for industry_name, file_names_lst in sorted(industry_files.items()):
-        print(industry_name)
+        industry_name_clean = industry_name.strip()
+        print(industry_name_clean)
         for file_name in file_names_lst:
             print('\t' + file_name)
             sub_df = pd.read_csv(tvl_raw_dir + gic_dir + file_name)
@@ -90,14 +91,14 @@ def label_all_industry_events_with_term_indicators(
                 print(file_name)
                 print(f'NOT ALL ARTICLES ARE {gic_dir[:-1]}!!!')
                 print()
-            if industry_name not in industry_all_events_dict:
-                industry_all_events_dict[industry_name] = sub_df
+            if industry_name_clean not in industry_all_events_dict:
+                industry_all_events_dict[industry_name_clean] = sub_df
             else:
-                industry_all_events_dict[industry_name] = industry_all_events_dict[industry_name].append(sub_df,
+                industry_all_events_dict[industry_name_clean] = industry_all_events_dict[industry_name_clean].append(sub_df,
                                                                                                          ignore_index=True)
 
         # Create some columns with cleaned text/dates
-        industry_df = industry_all_events_dict[industry_name].copy()
+        industry_df = industry_all_events_dict[industry_name_clean].copy()
         print(f'Before dropping dupes: {industry_df.shape}')
 
         # Drop duplicates for combos of company + TVL ID + article (repeating article pertaining to the same company)
@@ -111,7 +112,7 @@ def label_all_industry_events_with_term_indicators(
                            'Primary Article Bullet Points', 'Spotlight Start Date']
         industry_df = industry_df.drop_duplicates(drop_dupes_cols, keep='first')
         print(f'After dropping dupes: {industry_df.shape}')
-        industry_df['INDUSTRY'] = industry_name
+        industry_df['INDUSTRY'] = industry_name_clean
         industry_df = industry_df[['INDUSTRY', 'Company', 'TVL ID', 'Category', 'Primary Article Spotlight Headline',
                                    'Primary Article Bullet Points', 'Primary Article Source',
                                    'Primary Article URL Link', 'Spotlight Start Date',
@@ -155,7 +156,7 @@ def label_all_industry_events_with_term_indicators(
         # SUPPLIER RELATIONSHIP INDICATORS CREATED HERE
         create_term_type_indicators(industry_df, 'supplier-relationship', supplier_relship_regex_dict)
 
-        industry_all_events_dict[industry_name] = industry_df
+        industry_all_events_dict[industry_name_clean] = industry_df
     return industry_all_events_dict
 
 
