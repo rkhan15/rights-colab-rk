@@ -53,6 +53,8 @@ risk_category_to_term_mapping_SIMPLE = {
     'Operational-Costs': ['operational disruption', 'operating cost', 'delay',
                           'disruption'],
 
+    'Financial-Gain': ['sustainability bond'],
+
     'Financial-Loss': ['sanction', 'reimburse', 'restitution', 'fine',
                        'compensation', 'penalt', 'bankrupt', 'liabl', 'loss', 'lost'],
 
@@ -92,6 +94,7 @@ risk_category_to_term_mapping_COMPLEX = {
                                                             'seiz(.*)product', 'product(.*)seiz']), },
     'Financial-Loss': {'pay damages': attach_regex_to_beginning_of_terms(['pay(.*)damage']),
                        'seizure of assets': attach_regex_to_beginning_of_terms(['seiz(.*)asset']), },
+    'Financial-Gain': {},
     'Legal-Risk': {},
     'Reputational-Damage': {
         'workplace shutdown': attach_regex_to_beginning_of_terms(['workplace shutdown', 'shutdown']),

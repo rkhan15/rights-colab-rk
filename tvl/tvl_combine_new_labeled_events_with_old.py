@@ -16,16 +16,17 @@ if __name__ == '__main__':
     old_df = pd.read_excel(args.old_df_path)
     new_df = pd.read_csv(args.new_df_path)
 
-    old_df_drop_cols = [col for col in list(old_df.columns) if col not in ['INDUSTRY',
-                                                                           'Company',
-                                                                           'TVL ID',
-                                                                           'Category',
-                                                                           'Primary Article Spotlight Headline',
-                                                                           'Primary Article Bullet Points',
-                                                                           'Primary Article Source',
-                                                                           'Primary Article URL Link',
-                                                                           'Spotlight Volume', 'date',
-                                                                           'year', 'RELEVANT?']]
+    old_DO_NOT_DROP = ['INDUSTRY',
+                       'Company',
+                       'TVL ID',
+                       'Category',
+                       'Primary Article Spotlight Headline',
+                       'Primary Article Bullet Points',
+                       'Primary Article Source',
+                       'Primary Article URL Link',
+                       'Spotlight Volume', 'date',
+                       'year', 'RELEVANT?']
+    old_df_drop_cols = [col for col in list(old_df.columns) if col not in old_DO_NOT_DROP]
     old_df.drop(old_df_drop_cols, axis=1, inplace=True)
     merge_new_with_old = pd.merge(new_df, old_df, how='left',
                                   on=['INDUSTRY', 'Company', 'TVL ID', 'Category',
