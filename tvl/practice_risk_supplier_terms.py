@@ -76,7 +76,7 @@ risk_category_to_term_mapping_SIMPLE = {
               ],
 
     'Other-RK': ['scandal', 'government action', 'share price', 'share value',
-                 'investment',
+                 'investment'
                  # 'sales'
                  ]
 }
@@ -102,7 +102,8 @@ risk_category_to_term_mapping_COMPLEX = {
         'child labor': attach_regex_to_beginning_of_terms(['child labo[u]?r', 'child slave']),
     },
     'Other': {},
-    'Other-RK': {'negative return': attach_regex_to_beginning_of_terms(['negative(.*)return'])}
+    'Other-RK': {'negative return': attach_regex_to_beginning_of_terms(['negative(.*)return']),
+                 'long-term': attach_regex_to_beginning_of_terms(['long[- ]?term'])}
 }
 
 # Practice terms
@@ -226,7 +227,7 @@ practice_category_to_term_mapping_COMPLEX = {
                             ['unsafe(.*)condition', 'hazard(.*)condition', 'working conditions',
                              'deteriorating(.*)condition']),
                         'grievance mechanism': attach_regex_to_beginning_of_terms(
-                            ['grievance mechanism', 'grievance system'])},
+                            ['grievance[s]?', '(grievance|complaint) (mechanism|system|procedure|handl)', 'handl(.*)grievance', 'anonymous complaint'])},
     'Good-Practices': {'code of conduct negative': attach_regex_to_beginning_of_terms(
         ['code of conduct(.*)breach', 'breach(.*)code of conduct',
          'violat(.*)code of conduct', 'code of conduct(.*)violat',
