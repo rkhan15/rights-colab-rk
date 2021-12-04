@@ -10,7 +10,7 @@ def parse_cmd_line_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--labeled_industry_articles_path', type=str, required=True)
     parser.add_argument('--industry_to_sector_map_path', type=str, required=False,
-                        default='TVL_Industry_Abbrev_to_Sector_Mapping.csv')
+                        default='rights-colab-rk/tvl/TVL_Industry_Abbrev_to_Sector_Mapping.csv')
     parser.add_argument('--generate_merge', type=str, required=False, default=True)
     parser.add_argument('--generate_heatmap', type=str, required=False, default=False)
     parser.add_argument('--abbrev', type=str, required=False, default="TVLSuppChainMgmt")
