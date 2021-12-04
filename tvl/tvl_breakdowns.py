@@ -41,25 +41,37 @@ def get_industry_level_practice_breakdown(labeled_industry_articles, industry_to
     else:
         df_sub = labeled_industry_articles
 
-    practice_articles_or_events = {}
-    for i, row in df_sub[df_sub['RELEVANT?'] == 'Yes'].iterrows():
+    relevant_articles_or_events = set()
+    practice_term_articles_or_events = {}
+    for i, row in df_sub[(df_sub['ANY_PRACTICE_AND_RISK'] == 1) & (df_sub['RELEVANT?'] == 'Yes')].iterrows():
+        if article_level:
+            relevant_articles_or_events.add(row['index'])
+        else:
+            relevant_articles_or_events.add(row['TVL ID'])
+
         for practice_term_col in practice_term_cols:
-            if practice_term_col not in practice_articles_or_events:
-                practice_articles_or_events[practice_term_col] = set()
+            if practice_term_col not in practice_term_articles_or_events:
+                practice_term_articles_or_events[practice_term_col] = set()
 
             if row[practice_term_col] > 0:
                 if article_level:
-                    practice_articles_or_events[practice_term_col].add(row['index'])
+                    practice_term_articles_or_events[practice_term_col].add(row['index'])
                 else:
-                    practice_articles_or_events[practice_term_col].add(row['TVL ID'])
+                    practice_term_articles_or_events[practice_term_col].add(row['TVL ID'])
+
+    col_name_relevant_articles_or_events = "LCSC Article count" if article_level else "LCSC Event count"
+    df_relevant_articles_or_events = pd.DataFrame(columns=[col_name_relevant_articles_or_events])
+    df_relevant_articles_or_events = df_relevant_articles_or_events.append(
+        {col_name_relevant_articles_or_events: len(relevant_articles_or_events)}, ignore_index=True
+    )
 
     col_name_pterm_article_or_event = "Article count of practice term" if article_level else "Event count of practice term"
-    df_practice_articles_or_events = pd.DataFrame(columns=['Practice term', col_name_pterm_article_or_event])
-    for p_term, set_IDs in practice_articles_or_events.items():
-        df_practice_articles_or_events = df_practice_articles_or_events.append(
+    df_practice_term_articles_or_events = pd.DataFrame(columns=['Practice term', col_name_pterm_article_or_event])
+    for p_term, set_IDs in practice_term_articles_or_events.items():
+        df_practice_term_articles_or_events = df_practice_term_articles_or_events.append(
             {'Practice term': p_term, col_name_pterm_article_or_event: len(set_IDs)}, ignore_index=True
         )
-    df_practice_articles_or_events = df_practice_articles_or_events.sort_values(by=col_name_pterm_article_or_event,
+    df_practice_term_articles_or_events = df_practice_term_articles_or_events.sort_values(by=col_name_pterm_article_or_event,
                                                                                 ascending=False)
 
     # Remove counts of terms containing another term from the term's category itself
@@ -73,7 +85,7 @@ def get_industry_level_practice_breakdown(labeled_industry_articles, industry_to
     }
     for subterm, category in subterm_category_practice.items():
         remove_dupe_counts_of_practice_term(subterm, category, col_name_pterm_article_or_event,
-                                            df_practice_articles_or_events)
+                                            df_practice_term_articles_or_events)
 
     # Get totals for each practice term's co-occurrences with a risk term, regardless of industry
     practice_risk_articles_or_events = {}
@@ -121,10 +133,10 @@ def get_industry_level_practice_breakdown(labeled_industry_articles, industry_to
             subterm, category, col_name_pterm_rterm_article_or_event, df_practice_risk_articles_or_events)
 
     if not generate_merge:
-        return df_practice_articles_or_events, df_practice_risk_articles_or_events, None, None
+        return df_practice_term_articles_or_events, df_practice_risk_articles_or_events, None, None
 
     merge_practice_counts_with_risk_cooccurs = pd.merge(
-        df_practice_articles_or_events, df_practice_risk_articles_or_events, how='left', on='Practice term')
+        df_practice_term_articles_or_events, df_practice_risk_articles_or_events, how='left', on='Practice term')
     merge_practice_counts_with_risk_cooccurs[col_name_pterm_article_or_event] = merge_practice_counts_with_risk_cooccurs[
         col_name_pterm_article_or_event].astype(float)
     merge_practice_counts_with_risk_cooccurs[col_name_pterm_rterm_article_or_event] = merge_practice_counts_with_risk_cooccurs[
@@ -138,7 +150,7 @@ def get_industry_level_practice_breakdown(labeled_industry_articles, industry_to
         by='Co-occurrences over Total Practice count', ascending=False)
 
     if not generate_heatmap:
-        return df_practice_articles_or_events, df_practice_risk_articles_or_events, merge_practice_counts_with_risk_cooccurs, None
+        return df_practice_term_articles_or_events, df_practice_risk_articles_or_events, merge_practice_counts_with_risk_cooccurs, None
 
     df4 = merge_practice_counts_with_risk_cooccurs.pivot_table(
         index='Practice term', columns='Risk term', values='Co-occurrences over Total Practice count')
@@ -159,9 +171,9 @@ def get_industry_level_practice_breakdown(labeled_industry_articles, industry_to
 
     fig.update_layout(autosize=False,
         width=1600,
-        height=5*df_practice_articles_or_events.shape[0] + 600)
+        height=5*df_practice_term_articles_or_events.shape[0] + 600)
 
-    return df_practice_articles_or_events, df_practice_risk_articles_or_events, merge_practice_counts_with_risk_cooccurs, fig
+    return df_relevant_articles_or_events, df_practice_term_articles_or_events, df_practice_risk_articles_or_events, merge_practice_counts_with_risk_cooccurs, fig
 
 
 def remove_dupe_counts_of_practice_term(practice_term_to_check, category_practice_term_to_check,
@@ -242,6 +254,12 @@ if __name__ == '__main__':
     # So, we're creating an index for each article here, since each article is already unique:
     labeled_industry_articles = labeled_industry_articles.reset_index()
 
+    # Initialize dataframe for all GIC articles/events by industry/sector
+    col_name_relevant_articles_or_events = "LCSC Article count" if args.article_level else "LCSC Event count"
+    df_all_industry_relevant = pd.DataFrame(
+        columns=['SECTOR', 'INDUSTRY', col_name_relevant_articles_or_events]
+    )
+
     # Initialize dataframe for practice terms by industry/sector
     col_name_pterm_article_or_event = "Article count of practice term" if args.article_level else "Event count of practice term"
     df_all_industry_practices = pd.DataFrame(
@@ -253,24 +271,32 @@ if __name__ == '__main__':
         columns=['SECTOR', 'INDUSTRY', 'Practice term', 'Risk term', col_name_pterm_rterm_article_or_event])
 
     for industry, sector in dict_industry_to_sector_map.items():
-        print('Industry:', industry)
-        df_practice_articles_or_events, df_practice_risk_articles_or_events, merge_practice_counts_with_risk_cooccurs, fig = get_industry_level_practice_breakdown(
+        # print('Industry:', industry)
+        df_relevant_articles_or_events, df_practice_term_articles_or_events, df_practice_risk_articles_or_events, merge_practice_counts_with_risk_cooccurs, fig = get_industry_level_practice_breakdown(
             labeled_industry_articles, industry_to_sector_map, article_level=args.article_level,
             generate_merge=args.generate_merge, generate_heatmap=args.generate_heatmap, industry=industry)
 
-        df_practice_articles_or_events.insert(loc=0, column='INDUSTRY', value=industry)
-        df_practice_articles_or_events.insert(loc=0, column='SECTOR', value=sector)
-        df_all_industry_practices = df_all_industry_practices.append(df_practice_articles_or_events, ignore_index=True)
-        print(df_all_industry_practices['INDUSTRY'].nunique())
+        df_relevant_articles_or_events.insert(loc=0, column='INDUSTRY', value=industry)
+        df_relevant_articles_or_events.insert(loc=0, column='SECTOR', value=sector)
+        df_all_industry_relevant = df_all_industry_relevant.append(df_relevant_articles_or_events, ignore_index=True)
+        # print(df_all_industry_relevant['INDUSTRY'].nunique())
+
+        df_practice_term_articles_or_events.insert(loc=0, column='INDUSTRY', value=industry)
+        df_practice_term_articles_or_events.insert(loc=0, column='SECTOR', value=sector)
+        df_all_industry_practices = df_all_industry_practices.append(df_practice_term_articles_or_events, ignore_index=True)
+        # print(df_all_industry_practices['INDUSTRY'].nunique())
 
         df_practice_risk_articles_or_events.insert(loc=0, column='INDUSTRY', value=industry)
         df_practice_risk_articles_or_events.insert(loc=0, column='SECTOR', value=sector)
         df_all_industry_cooccurs = df_all_industry_cooccurs.append(df_practice_risk_articles_or_events,
                                                                    ignore_index=True)
-        print(df_all_industry_cooccurs['INDUSTRY'].nunique())
-        print()
+        # print(df_all_industry_cooccurs['INDUSTRY'].nunique())
+        # print()
 
     article_level_abbrev = "Article_Level" if args.article_level else "Event_Level"
+    df_all_industry_relevant.to_csv(
+        f'{datetime.datetime.today().month}_{datetime.datetime.today().day}-{args.abbrev}-Total_Relevant_{article_level_abbrev}_Breakdown.csv',
+        index=False)
     df_all_industry_practices.to_csv(
         f'{datetime.datetime.today().month}_{datetime.datetime.today().day}-{args.abbrev}-Practice_{article_level_abbrev}_Breakdown.csv',
         index=False)
