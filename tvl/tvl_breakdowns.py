@@ -99,7 +99,7 @@ def get_industry_level_practice_breakdown(labeled_industry_articles, industry_to
     else:
         df_sub2 = labeled_industry_articles
 
-    for i, row in df_sub2[df_sub2['RELEVANT?'] == 'Yes'].iterrows():
+    for i, row in df_sub2[(df_sub2['ANY_PRACTICE_AND_RISK'] == 1) & (df_sub2['RELEVANT?'] == 'Yes')].iterrows():
         for practice_term_col in practice_term_cols:
             if practice_term_col not in practice_risk_articles_or_events:
                 practice_risk_articles_or_events[practice_term_col] = dict()  # {'practice term': {'risk_term': set()}}
@@ -133,7 +133,7 @@ def get_industry_level_practice_breakdown(labeled_industry_articles, industry_to
             subterm, category, col_name_pterm_rterm_article_or_event, df_practice_risk_articles_or_events)
 
     if not generate_merge:
-        return df_practice_term_articles_or_events, df_practice_risk_articles_or_events, None, None
+        return df_relevant_articles_or_events, df_practice_term_articles_or_events, df_practice_risk_articles_or_events, None, None
 
     merge_practice_counts_with_risk_cooccurs = pd.merge(
         df_practice_term_articles_or_events, df_practice_risk_articles_or_events, how='left', on='Practice term')
@@ -150,7 +150,7 @@ def get_industry_level_practice_breakdown(labeled_industry_articles, industry_to
         by='Co-occurrences over Total Practice count', ascending=False)
 
     if not generate_heatmap:
-        return df_practice_term_articles_or_events, df_practice_risk_articles_or_events, merge_practice_counts_with_risk_cooccurs, None
+        return df_relevant_articles_or_events, df_practice_term_articles_or_events, df_practice_risk_articles_or_events, merge_practice_counts_with_risk_cooccurs, None
 
     df4 = merge_practice_counts_with_risk_cooccurs.pivot_table(
         index='Practice term', columns='Risk term', values='Co-occurrences over Total Practice count')
