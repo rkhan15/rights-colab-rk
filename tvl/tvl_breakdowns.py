@@ -42,7 +42,7 @@ def get_industry_level_practice_breakdown(labeled_industry_articles, industry_to
         df_sub = labeled_industry_articles
 
     practice_articles_or_events = {}
-    for i, row in df_sub.iterrows():
+    for i, row in df_sub[df_sub['RELEVANT?'] == 'Yes'].iterrows():
         for practice_term_col in practice_term_cols:
             if practice_term_col not in practice_articles_or_events:
                 practice_articles_or_events[practice_term_col] = set()
