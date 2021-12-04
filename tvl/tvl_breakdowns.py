@@ -216,6 +216,7 @@ if __name__ == '__main__':
     industry_to_sector_map = pd.read_csv(args.industry_to_sector_map_path)
     dict_industry_to_sector_map = dict(
         zip(industry_to_sector_map['TVL Industry Abbrev'], industry_to_sector_map.SECTOR_FULL_NAME))
+    print('Total industries:', len(dict_industry_to_sector_map))
 
     # Print stats related to labor heuristic
     # The labor keyword indicators (a heuristic built in early Oct) pick up 164/215 relevant articles (77%)
@@ -252,6 +253,7 @@ if __name__ == '__main__':
         columns=['SECTOR', 'INDUSTRY', 'Practice term', 'Risk term', col_name_pterm_rterm_article_or_event])
 
     for industry, sector in dict_industry_to_sector_map.items():
+        print('Industry:', industry)
         df_practice_articles_or_events, df_practice_risk_articles_or_events, merge_practice_counts_with_risk_cooccurs, fig = get_industry_level_practice_breakdown(
             labeled_industry_articles, industry_to_sector_map, article_level=args.article_level,
             generate_merge=args.generate_merge, generate_heatmap=args.generate_heatmap, industry=industry)
@@ -259,11 +261,14 @@ if __name__ == '__main__':
         df_practice_articles_or_events.insert(loc=0, column='INDUSTRY', value=industry)
         df_practice_articles_or_events.insert(loc=0, column='SECTOR', value=sector)
         df_all_industry_practices = df_all_industry_practices.append(df_practice_articles_or_events, ignore_index=True)
+        print(df_all_industry_practices['INDUSTRY'].nunique())
 
         df_practice_risk_articles_or_events.insert(loc=0, column='INDUSTRY', value=industry)
         df_practice_risk_articles_or_events.insert(loc=0, column='SECTOR', value=sector)
         df_all_industry_cooccurs = df_all_industry_cooccurs.append(df_practice_risk_articles_or_events,
                                                                    ignore_index=True)
+        print(df_all_industry_cooccurs['INDUSTRY'].nunique())
+        print()
 
     article_level_abbrev = "Article_Level" if args.article_level else "Event_Level"
     df_all_industry_practices.to_csv(
