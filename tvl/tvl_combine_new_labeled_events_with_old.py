@@ -25,7 +25,7 @@ if __name__ == '__main__':
                        'Primary Article Source',
                        'Primary Article URL Link',
                        'Spotlight Volume', 'date',
-                       'year', 'RELEVANT?']
+                       'year', 'RELEVANT?', 'Notes']
     old_df_drop_cols = [col for col in list(old_df.columns) if col not in old_DO_NOT_DROP]
     old_df.drop(old_df_drop_cols, axis=1, inplace=True)
     merge_new_with_old = pd.merge(new_df, old_df, how='left',
@@ -40,7 +40,7 @@ if __name__ == '__main__':
     merge_new_with_old = merge_new_with_old.rename(columns=rename_y_cols)
 
     all_cols = list(merge_new_with_old.columns)
-    cols_sub_v1 = ['RELEVANT?']
+    cols_sub_v1 = ['RELEVANT?', 'Notes']
     cols_minus_sub_v1 = [i for i in all_cols if i not in cols_sub_v1]
 
     col_order_1 = ['INDUSTRY',
