@@ -2,13 +2,18 @@ INDUSTRY_ID,INDUSTRY_NAME,SECTOR_ID,SUBSECTOR_ID,TVL Industry Abbrev,SECTOR_FULL
 CG-AA,"Apparel, Accessories & Footwear",CG,CG.1,"Apparel,Accessories & Foo",Consumer Goods
 CG-AM,Appliance Manufacturing,CG,CG.2,ApplianceManufacturing,Consumer Goods
 CG-BF,Building Products & Furnishings,CG,CG.2,BuildingProducts & Furnis,Consumer Goods
+CG-EC,E-Commerce,CG,CG.3,E-Commerce,Consumer Goods
 CG-HP,Household & Personal Products,CG,CG.2,Household& Personal Produ,Consumer Goods
 CG-MR,Multiline and Specialty Retailers & Distributors,CG,CG.3,Multilineand Specialty Re,Consumer Goods
 CG-TS,Toys & Sporting Goods,CG,CG.2,Toys& Sporting Goods,Consumer Goods
 EM-CM,Construction Materials,EM,EM.2,ConstructionMaterials,Extractives & Minerals Processing
 EM-CO,Coal Operations,EM,EM.1,CoalOperations,Extractives & Minerals Processing
+EM-EP,Oil & Gas - Exploration & Production,EM,EM.4,Oil& Gas - Exploration &,Extractives & Minerals Processing
 EM-IS,Iron & Steel Producers,EM,EM.3,Iron& Steel Producers,Extractives & Minerals Processing
+EM-MD,Oil & Gas - Midstream,EM,EM.4,Oil& Gas - Midstream,Extractives & Minerals Processing
 EM-MM,Metals & Mining,EM,EM.3,Metals& Mining,Extractives & Minerals Processing
+EM-RM,Oil & Gas - Refining & Marketing,EM,EM.4,Oil& Gas - Refining & Mar,Extractives & Minerals Processing
+EM-SV,Oil & Gas - Services,EM,EM.4,Oil& Gas - Services,Extractives & Minerals Processing
 FB-AB,Alcoholic Beverages,FB,FB.2,AlcoholicBeverages,Food & Beverage
 FB-AG,Agricultural Products,FB,FB.1,AgriculturalProducts,Food & Beverage
 FB-FR,Food Retailers & Distributors,FB,FB.3,FoodRetailers & Distribut,Food & Beverage
