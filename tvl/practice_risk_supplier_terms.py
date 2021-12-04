@@ -152,7 +152,6 @@ practice_category_to_term_mapping_SIMPLE = {
         # 'lockout',
         'employee morale',
         'freedom of association',
-        'collective bargaining',
         'work stoppage',
         'hotline',
         'worker retention'
@@ -230,7 +229,8 @@ practice_category_to_term_mapping_COMPLEX = {
                             ['unsafe(.*)condition', 'hazard(.*)condition', 'working conditions',
                              'deteriorating(.*)condition']),
                         'grievance mechanism': attach_regex_to_beginning_of_terms(
-                            ['grievance[s]?', '(grievance|complaint) (mechanism|system|procedure|handl)', 'handl(.*)grievance', 'anonymous complaint'])},
+                            ['grievance[s]?', '(grievance|complaint) (mechanism|system|procedure|handl)',
+                             'handl(.*)grievance', 'anonymous complaint', 'worker voice mechanism'])},
     'Good-Practices': {'code of conduct negative': attach_regex_to_beginning_of_terms(
         ['code of conduct(.*)breach', 'breach(.*)code of conduct',
          'violat(.*)code of conduct', 'code of conduct(.*)violat',
@@ -238,7 +238,8 @@ practice_category_to_term_mapping_COMPLEX = {
          'break(.*)code of conduct',
          'broken(.*)code of conduct', 'code of conduct(.*)broken',
          'fail(.*)code of conduct']),
-        'responsible exit': attach_regex_to_beginning_of_terms(['responsibl[e|y](.*)exit', 'exit(.*)responsibl[e|y]'])
+        'responsible exit': attach_regex_to_beginning_of_terms(['responsibl[e|y](.*)exit', 'exit(.*)responsibl[e|y]']),
+        'collective bargaining': attach_regex_to_beginning_of_terms(['collective bargaining', 'enterprise bargaining'])
                        },
     'Neutral-Practices': {'corrective action': attach_regex_to_beginning_of_terms(
         ['corrective(.*)action', 'corrective(.*)plan', 'corrective(.*)measure'])
