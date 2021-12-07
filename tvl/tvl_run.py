@@ -35,6 +35,31 @@ if __name__ == '__main__':
     print(all_industries_events_master_df.shape)
     all_industries_events_master_df['INDUSTRY'] = all_industries_events_master_df['INDUSTRY'].str.strip()
 
+    # Drop duplicate articles for within each industry, to count each article at the INDUSTRY level only ONCE
+    # (Drop duplicates on ("INDUSTRY" and) "Primary Article Spotlight Headline" and "Primary Article Bullet Points" and "Spotlight Start Date")
+    # (This is because we only care about each article at the INDUSTRY level, not the TVL ID level (company + event))
+    ### 12/7/21 UPDATE: Keeping industry-level dupes
+    # all_industries_events_master_df = all_industries_events_master_df.drop_duplicates(
+    #     ['INDUSTRY', 'Primary Article Spotlight Headline', 'Primary Article Bullet Points', 'Spotlight Start Date'],
+    #     keep='first')
+
+    # Creating an article ID to keep track of same articles across companies/industries
+    cols_to_track_same_article = ['Primary Article Spotlight Headline',
+                                  'Primary Article Bullet Points',
+                                  'Spotlight Start Date',
+                                  'Spotlight End Date',
+                                  'Primary Article Source',
+                                  'Primary Article URL Link'
+                                  ]
+    all_industries_events_master_df['article_idx_cols'] = tuple(zip(all_industries_events_master_df[col]
+                                                                    for col in cols_to_track_same_article))
+    article_to_idx_mapping = {article_info: idx
+                              for idx, article_info in
+                              enumerate(list(all_industries_events_master_df['article_idx_cols'].unique()))}
+    all_industries_events_master_df['article_idx'] = all_industries_events_master_df['article_idx_cols'].map(
+        article_to_idx_mapping)
+    all_industries_events_master_df.drop('article_idx_cols', axis=1, inplace=True)
+
     # Adding indicators of having any practice term or risk term,
     # to quickly identify events with co-occurrences of practice and risk terms
     # indicator format: {term}_{PRACTICE/RISK}_{category}
@@ -67,10 +92,10 @@ if __name__ == '__main__':
 
     all_industries_events_master_df['ANY_PRACTICE_AND_RISK'] = np.where(
         (all_industries_events_master_df['ANY_PRACTICE_TERM'] == 1) & (
-                    all_industries_events_master_df['ANY_RISK_TERM'] == 1), 1, 0)
+                all_industries_events_master_df['ANY_RISK_TERM'] == 1), 1, 0)
     all_industries_events_master_df['ANY_RISK_AND_marked_labor_relevant'] = np.where(
         (all_industries_events_master_df['marked_labor_relevant_ind'] == 1) & (
-                    all_industries_events_master_df['ANY_RISK_TERM'] == 1), 1, 0)
+                all_industries_events_master_df['ANY_RISK_TERM'] == 1), 1, 0)
 
     all_industries_events_master_df['ANY_SUPPLIER_RELATIONSHIP_TERM'] = 0
     for supplier_relship_col in supplier_relship_cols:
@@ -93,9 +118,8 @@ if __name__ == '__main__':
         lambda row: list_terms_found(row, supplier_relship_cols), axis=1)
 
     # Column cleanup:
-    # all_industries_events_master_df.columns
-
-    for i, col in enumerate(['ANY_PRACTICE_TERM',
+    for i, col in enumerate(['article_idx',
+                             'ANY_PRACTICE_TERM',
                              'ANY_RISK_TERM',
                              'ANY_PRACTICE_AND_RISK',
                              'PRACTICE_TERMS_FOUND',
@@ -110,16 +134,13 @@ if __name__ == '__main__':
     cols_to_drop = ['headline_lower', 'bullet_pts_lower']
     all_industries_events_master_df = all_industries_events_master_df.drop(cols_to_drop, axis=1)
 
-    # Drop duplicate articles for within each industry, to count each article at the INDUSTRY level only ONCE
-    # (Drop duplicates on ("INDUSTRY" and) "Primary Article Spotlight Headline" and "Primary Article Bullet Points" and "Spotlight Start Date")
-    # (This is because we only care about each article at the INDUSTRY level, not the TVL ID level (company + event))
-    all_industries_events_master_df = all_industries_events_master_df.drop_duplicates(
-        ['INDUSTRY', 'Primary Article Spotlight Headline', 'Primary Article Bullet Points', 'Spotlight Start Date'],
-        keep='first')
     print("Total articles:", all_industries_events_master_df.shape[0])
-    print("Number of ARTICLES with a practice-risk co-occurrence:", all_industries_events_master_df['ANY_PRACTICE_AND_RISK'].sum())
+    print("Number of ARTICLES with a practice-risk co-occurrence:",
+          all_industries_events_master_df['ANY_PRACTICE_AND_RISK'].sum())
     print("Total events:", all_industries_events_master_df['TVL ID'].nunique())
-    print("Number of EVENTS with a practice-risk co-occurrence", all_industries_events_master_df.groupby(['INDUSTRY', 'TVL ID'])['ANY_PRACTICE_AND_RISK'].sum().reset_index()['ANY_PRACTICE_AND_RISK'].value_counts().reset_index().iloc[1:]['ANY_PRACTICE_AND_RISK'].sum())
+    print("Number of EVENTS with a practice-risk co-occurrence",
+          all_industries_events_master_df.groupby(['INDUSTRY', 'TVL ID'])['ANY_PRACTICE_AND_RISK'].sum().reset_index()[
+              'ANY_PRACTICE_AND_RISK'].value_counts().reset_index().iloc[1:]['ANY_PRACTICE_AND_RISK'].sum())
 
     # SAVE ALL EVENTS WITH ALL INDICATORS
     all_industries_events_master_df.to_csv(

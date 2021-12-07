@@ -102,12 +102,13 @@ def label_all_industry_events_with_term_indicators(
         print(f'Before dropping dupes: {industry_df.shape}')
 
         # Drop duplicates for combos of company + TVL ID + article (repeating article pertaining to the same company)
-        # Reasoning: TVL ID represents an identifier of a Spotlight Event for ONE company.
+        # Reasoning: Repeating articles may occur due to potential overlap of articles from the CSVs.
+        # Background: TVL ID represents an identifier of a Spotlight Event for ONE company.
         # A Spotlight Event may be made up of several articles.
         # So we do not yet want to drop all the articles that comprise a single TVL ID by
         # doing a hard drop_duplicates on JUST TVL ID. So, we are dropping on a combination of
         # columns, to ensure that we only drop repeating articles for the same company.
-        # Repeating articles may occur due to potential overlap of articles from the CSVs.
+
         drop_dupes_cols = ['Company', 'TVL ID', 'Primary Article Spotlight Headline',
                            'Primary Article Bullet Points', 'Spotlight Start Date']
         industry_df = industry_df.drop_duplicates(drop_dupes_cols, keep='first')
