@@ -56,7 +56,7 @@ risk_category_to_term_mapping_SIMPLE = {
     'Financial-Gain': ['sustainability bond'],
 
     'Financial-Loss': ['sanction', 'reimburse', 'restitution', 'fine',
-                       'compensation', 'penalt', 'bankrupt', 'liabl', 'loss', 'lost'],
+                       'compensation', 'penalt', 'bankrupt', 'liable', 'liability', 'loss', 'lost'],
 
     'Legal-Risk': ['lawsuit', 'litigation', 'impoundment', 'detain',
                    'penalt', 'sanction', 'court'],
