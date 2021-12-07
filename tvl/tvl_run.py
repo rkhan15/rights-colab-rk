@@ -47,8 +47,6 @@ if __name__ == '__main__':
     # Creating an article ID to keep track of same articles across companies/industries
     cols_to_track_same_article = ['Primary Article Spotlight Headline',
                                   'Primary Article Bullet Points',
-                                  'Spotlight Start Date',
-                                  'Spotlight End Date',
                                   'Primary Article Source',
                                   'Primary Article URL Link'
                                   ]
