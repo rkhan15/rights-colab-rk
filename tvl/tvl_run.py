@@ -60,7 +60,7 @@ if __name__ == '__main__':
 
     all_industries_events_master_df['article_idx'] = all_industries_events_master_df.apply(
         lambda row: article_to_idx_mapping[row['article_idx_cols']], axis=1)
-    # all_industries_events_master_df.drop('article_idx_cols', axis=1, inplace=True)
+    all_industries_events_master_df.drop('article_idx_cols', axis=1, inplace=True)
 
     # Adding indicators of having any practice term or risk term,
     # to quickly identify events with co-occurrences of practice and risk terms
