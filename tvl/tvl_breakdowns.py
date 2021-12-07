@@ -43,6 +43,8 @@ def get_industry_level_practice_breakdown(labeled_industry_articles, industry_to
 
     relevant_articles_or_events = set()
     practice_term_articles_or_events = {}
+    practice_category_articles_or_events = {}  # TODO
+
     for i, row in df_sub[(df_sub['ANY_PRACTICE_AND_RISK'] == 1) & (df_sub['RELEVANT?'] == 'Yes')].iterrows():
         if article_level:
             relevant_articles_or_events.add(row['index'])
@@ -50,14 +52,21 @@ def get_industry_level_practice_breakdown(labeled_industry_articles, industry_to
             relevant_articles_or_events.add(row['TVL ID'])
 
         for practice_term_col in practice_term_cols:
+
             if practice_term_col not in practice_term_articles_or_events:
                 practice_term_articles_or_events[practice_term_col] = set()
+
+            practice_category = practice_term_col.split('_')[2]
+            if practice_category not in practice_category_articles_or_events:
+                practice_category_articles_or_events[practice_category] = set()
 
             if row[practice_term_col] > 0:
                 if article_level:
                     practice_term_articles_or_events[practice_term_col].add(row['index'])
+                    practice_category_articles_or_events[practice_category].add(row['index'])
                 else:
                     practice_term_articles_or_events[practice_term_col].add(row['TVL ID'])
+                    practice_category_articles_or_events[practice_category].add(row['TVL ID'])
 
     col_name_relevant_articles_or_events = "LCSC Article count" if article_level else "LCSC Event count"
     df_relevant_articles_or_events = pd.DataFrame(columns=[col_name_relevant_articles_or_events])
@@ -66,13 +75,22 @@ def get_industry_level_practice_breakdown(labeled_industry_articles, industry_to
     )
 
     col_name_pterm_article_or_event = "Article count of practice term" if article_level else "Event count of practice term"
+
     df_practice_term_articles_or_events = pd.DataFrame(columns=['Practice term', col_name_pterm_article_or_event])
     for p_term, set_IDs in practice_term_articles_or_events.items():
         df_practice_term_articles_or_events = df_practice_term_articles_or_events.append(
             {'Practice term': p_term, col_name_pterm_article_or_event: len(set_IDs)}, ignore_index=True
         )
-    df_practice_term_articles_or_events = df_practice_term_articles_or_events.sort_values(by=col_name_pterm_article_or_event,
-                                                                                ascending=False)
+    df_practice_term_articles_or_events = df_practice_term_articles_or_events.sort_values(
+        by=col_name_pterm_article_or_event, ascending=False)
+
+    df_practice_category_articles_or_events = pd.DataFrame(columns=['Practice term', col_name_pterm_article_or_event])
+    for p_term, set_IDs in practice_category_articles_or_events.items():
+        df_practice_category_articles_or_events = df_practice_category_articles_or_events.append(
+            {'Practice term': p_term, col_name_pterm_article_or_event: len(set_IDs)}, ignore_index=True
+        )
+    df_practice_category_articles_or_events = df_practice_category_articles_or_events.sort_values(
+        by=col_name_pterm_article_or_event, ascending=False)
 
     # Remove counts of terms containing another term from the term's category itself
     # TODO: Add to this dict as needed for future terms
