@@ -2,6 +2,7 @@ import argparse
 import datetime
 import numpy as np
 import pandas as pd
+import sys
 
 from practice_risk_supplier_terms import *
 from tvl_helpers import *
@@ -42,6 +43,11 @@ if __name__ == '__main__':
     # all_industries_events_master_df = all_industries_events_master_df.drop_duplicates(
     #     ['INDUSTRY', 'Primary Article Spotlight Headline', 'Primary Article Bullet Points', 'Spotlight Start Date'],
     #     keep='first')
+
+    # TODO: Remove when done
+    all_industries_events_master_df.to_csv('all_industries_events_master_df.csv', index=False)
+    sys.exit(0)
+    # TODO end
 
     # Creating an article ID to keep track of same articles across companies/industries
     cols_to_track_same_article = ['Primary Article Spotlight Headline',
