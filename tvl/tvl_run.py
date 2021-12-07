@@ -2,7 +2,6 @@ import argparse
 import datetime
 import numpy as np
 import pandas as pd
-import sys
 
 from practice_risk_supplier_terms import *
 from tvl_helpers import *
@@ -44,11 +43,6 @@ if __name__ == '__main__':
     #     ['INDUSTRY', 'Primary Article Spotlight Headline', 'Primary Article Bullet Points', 'Spotlight Start Date'],
     #     keep='first')
 
-    # TODO: Remove when done
-    all_industries_events_master_df.to_csv('all_industries_events_master_df.csv', index=False)
-    sys.exit(0)
-    # TODO end
-
     # Creating an article ID to keep track of same articles across companies/industries
     cols_to_track_same_article = ['Primary Article Spotlight Headline',
                                   'Primary Article Bullet Points',
@@ -57,14 +51,16 @@ if __name__ == '__main__':
                                   'Primary Article Source',
                                   'Primary Article URL Link'
                                   ]
-    all_industries_events_master_df['article_idx_cols'] = tuple(zip(all_industries_events_master_df[col]
-                                                                    for col in cols_to_track_same_article))
-    article_to_idx_mapping = {article_info: idx
+    all_industries_events_master_df['article_idx_cols'] = all_industries_events_master_df.apply(
+        lambda row: tuple(zip(row[col] for col in cols_to_track_same_article)), axis=1)
+
+    article_to_idx_mapping = {article_info: idx + 1
                               for idx, article_info in
                               enumerate(list(all_industries_events_master_df['article_idx_cols'].unique()))}
-    all_industries_events_master_df['article_idx'] = all_industries_events_master_df['article_idx_cols'].map(
-        article_to_idx_mapping)
-    all_industries_events_master_df.drop('article_idx_cols', axis=1, inplace=True)
+
+    all_industries_events_master_df['article_idx'] = all_industries_events_master_df.apply(
+        lambda row: article_to_idx_mapping[row['article_idx_cols']], axis=1)
+    # all_industries_events_master_df.drop('article_idx_cols', axis=1, inplace=True)
 
     # Adding indicators of having any practice term or risk term,
     # to quickly identify events with co-occurrences of practice and risk terms
