@@ -274,7 +274,7 @@ def remove_dupe_counts_of_risk_term(risk_term_to_check, category_risk_term_to_ch
 
 if __name__ == '__main__':
     args = parse_cmd_line_args()
-    labeled_industry_articles = pd.read_excel(args.labeled_industry_articles_path)
+    labeled_industry_articles = pd.read_csv(args.labeled_industry_articles_path)
     industry_to_sector_map = pd.read_csv(args.industry_to_sector_map_path)
     dict_industry_to_sector_map = dict(
         zip(industry_to_sector_map['TVL Industry Abbrev'], industry_to_sector_map.SECTOR_FULL_NAME))
