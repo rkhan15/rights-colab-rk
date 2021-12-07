@@ -2,6 +2,7 @@ import argparse
 import datetime
 import numpy as np
 import pandas as pd
+import pickle
 
 from practice_risk_supplier_terms import *
 from tvl_helpers import *
@@ -148,3 +149,6 @@ if __name__ == '__main__':
     all_industries_events_master_df.to_csv(
         f'{datetime.datetime.today().month}_{datetime.datetime.today().day}-{args.abbrev}-Industry_Article_Lvl.csv',
         index=False)
+
+    with open(f'{datetime.datetime.today().month}_{datetime.datetime.today().day}-{args.abbrev}-article_to_idx_mapping.pickle', 'wb') as handle:
+        pickle.dump(article_to_idx_mapping, handle, protocol=pickle.HIGHEST_PROTOCOL)
