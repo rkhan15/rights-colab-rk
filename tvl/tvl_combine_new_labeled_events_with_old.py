@@ -1,20 +1,26 @@
 import argparse
 import datetime
 import pandas as pd
+import pickle
 
 
 def parse_cmd_line_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--old_df_path', type=str, required=True)
     parser.add_argument('--new_df_path', type=str, required=True)
+    parser.add_argument('--article_to_idx_path', type=str, required=True)
     parser.add_argument('--abbrev', type=str, required=False, default="TVLSuppChainMgmt")
     return parser.parse_args()
 
 
 if __name__ == '__main__':
     args = parse_cmd_line_args()
-    old_df = pd.read_excel(args.old_df_path)
+    old_df = pd.read_csv(args.old_df_path)
+    old_df = old_df.drop_duplicates()
     new_df = pd.read_csv(args.new_df_path)
+
+    with open(args.article_to_idx_path, 'rb') as handle:
+        article_to_idx_mapping = pickle.load(handle)
 
     old_DO_NOT_DROP = ['INDUSTRY',
                        'Company',
@@ -26,13 +32,15 @@ if __name__ == '__main__':
                        'Primary Article URL Link',
                        'Spotlight Volume', 'date',
                        'year', 'RELEVANT?', 'Notes']
+
     old_df_drop_cols = [col for col in list(old_df.columns) if col not in old_DO_NOT_DROP]
     old_df.drop(old_df_drop_cols, axis=1, inplace=True)
     merge_new_with_old = pd.merge(new_df, old_df, how='left',
                                   on=['INDUSTRY', 'Company', 'TVL ID', 'Category',
                                       'Primary Article Spotlight Headline',
                                       'Primary Article Bullet Points', 'Primary Article Source',
-                                      'Primary Article URL Link', 'Spotlight Volume'])
+                                      'Primary Article URL Link', 'Spotlight Volume']
+                                  )
 
     cols_to_drop = [col for col in list(merge_new_with_old.columns) if col.endswith('_y')]
     merge_new_with_old.drop(cols_to_drop, axis=1, inplace=True)
@@ -47,6 +55,7 @@ if __name__ == '__main__':
                    'Company',
                    'TVL ID',
                    'Category',
+                   'article_idx',
                    'ANY_PRACTICE_TERM',
                    'ANY_RISK_TERM',
                    'ANY_PRACTICE_AND_RISK',
