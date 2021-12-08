@@ -52,7 +52,12 @@ def get_industry_level_practice_breakdown(labeled_industry_articles, industry_to
 
     for year in (MIN_YEAR, MAX_YEAR+1):
         year_subset = df_sub[(df_sub['ANY_PRACTICE_AND_RISK'] == 1) & (df_sub['RELEVANT?'] == 'Yes') & (df_sub['year'] == year)]
-        assert year_subset.shape[0] > 0
+
+        for practice_term_col in practice_term_cols:
+            if practice_term_col not in dict_practice_term_articles_or_events[year]:
+                dict_practice_term_articles_or_events[year][practice_term_col] = set()
+
+        # assert year_subset.shape[0] > 0
 
         for i, row in year_subset.iterrows():
 
@@ -65,8 +70,8 @@ def get_industry_level_practice_breakdown(labeled_industry_articles, industry_to
 
             for practice_term_col in practice_term_cols:
 
-                if practice_term_col not in dict_practice_term_articles_or_events[year]:
-                    dict_practice_term_articles_or_events[year][practice_term_col] = set()
+                # if practice_term_col not in dict_practice_term_articles_or_events[year]:
+                #     dict_practice_term_articles_or_events[year][practice_term_col] = set()
                 # if practice_term_col not in practice_term_articles_or_events:
                 #     practice_term_articles_or_events[practice_term_col] = set()
 
@@ -145,13 +150,19 @@ def get_industry_level_practice_breakdown(labeled_industry_articles, industry_to
     # practice_risk_articles_or_events = {}
     for year in (MIN_YEAR, MAX_YEAR + 1):
         year_subset = df_sub2[(df_sub2['ANY_PRACTICE_AND_RISK'] == 1) & (df_sub2['RELEVANT?'] == 'Yes') & (df_sub['year'] == year)]
-        assert year_subset.shape[0] > 0
+
+        for practice_term_col in practice_term_cols:
+            if practice_term_col not in dict_practice_risk_articles_or_events[year]:
+                dict_practice_risk_articles_or_events[year][
+                    practice_term_col] = dict()  # {'practice term': {'risk_term': set()}}
+
+        # assert year_subset.shape[0] > 0
 
         for i, row in year_subset.iterrows():
             for practice_term_col in practice_term_cols:
 
-                if practice_term_col not in dict_practice_risk_articles_or_events[year]:
-                    dict_practice_risk_articles_or_events[year][practice_term_col] = dict()  # {'practice term': {'risk_term': set()}}
+                # if practice_term_col not in dict_practice_risk_articles_or_events[year]:
+                #     dict_practice_risk_articles_or_events[year][practice_term_col] = dict()  # {'practice term': {'risk_term': set()}}
 
                 # practice_category = practice_term_col.split('_')[2]
                 # if practice_category not in dict_practice_cat_risk_articles_or_events[year]:
