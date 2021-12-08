@@ -91,7 +91,7 @@ def get_industry_level_practice_breakdown(labeled_industry_articles, industry_to
                         ## dict_practice_category_articles_or_events[year][practice_term_col].add(row['TVL ID'])
                         # practice_category_articles_or_events[practice_category].add(row['TVL ID'])
 
-    col_name_relevant_articles_or_events = "LCSC Article count" if article_level else "LCSC Event count"
+    col_name_relevant_articles_or_events = "Total LCSC Relevant Article count" if article_level else "Total LCSC Relevant Event count"
     df_relevant_articles_or_events = pd.DataFrame(columns=['Year', col_name_relevant_articles_or_events])
     for year in (MIN_YEAR, MAX_YEAR + 1):
         df_relevant_articles_or_events = df_relevant_articles_or_events.append(
@@ -340,9 +340,9 @@ if __name__ == '__main__':
     labeled_industry_articles = labeled_industry_articles.reset_index()
 
     # Initialize dataframe for all GIC articles/events by industry/sector
-    col_name_relevant_articles_or_events = "LCSC Article count" if args.article_level else "LCSC Event count"
+    col_name_relevant_articles_or_events = "Total LCSC Relevant Article count" if args.article_level else "Total LCSC Relevant Event count"
     df_all_industry_relevant = pd.DataFrame(
-        columns=['SECTOR', 'INDUSTRY', col_name_relevant_articles_or_events]
+        columns=['SECTOR', 'INDUSTRY', 'Year', col_name_relevant_articles_or_events]
     )
 
     # Initialize dataframe for practice terms by industry/sector
