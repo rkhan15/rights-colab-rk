@@ -348,12 +348,12 @@ if __name__ == '__main__':
     # Initialize dataframe for practice terms by industry/sector
     col_name_pterm_article_or_event = "Article count of practice term" if args.article_level else "Event count of practice term"
     df_all_industry_practices = pd.DataFrame(
-        columns=['SECTOR', 'INDUSTRY', 'Practice term', col_name_pterm_article_or_event])
+        columns=['SECTOR', 'INDUSTRY', 'Year', 'Practice term', col_name_pterm_article_or_event])
 
     # Initialize dataframe for practice-risk co-occurrences by industry/sector
     col_name_pterm_rterm_article_or_event = "Article count of co-occurrence" if args.article_level else "Event count of co-occurrence"
     df_all_industry_cooccurs = pd.DataFrame(
-        columns=['SECTOR', 'INDUSTRY', 'Practice term', 'Risk term', col_name_pterm_rterm_article_or_event])
+        columns=['SECTOR', 'INDUSTRY', 'Year', 'Practice term', 'Risk term', col_name_pterm_rterm_article_or_event])
 
     for industry, sector in dict_industry_to_sector_map.items():
         # print('Industry:', industry)
