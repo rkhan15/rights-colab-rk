@@ -91,7 +91,7 @@ def get_industry_level_practice_breakdown(labeled_industry_articles, industry_to
                         ## dict_practice_category_articles_or_events[year][practice_term_col].add(row['TVL ID'])
                         # practice_category_articles_or_events[practice_category].add(row['TVL ID'])
 
-    col_name_relevant_articles_or_events = "Total LCSC Relevant Article count" if article_level else "Total LCSC Relevant Event count"
+    col_name_relevant_articles_or_events = "Yearly LCSC Relevant Article count" if article_level else "Yearly LCSC Relevant Event count"
     df_relevant_articles_or_events = pd.DataFrame(columns=['Year', col_name_relevant_articles_or_events])
     for year in range(MIN_YEAR, MAX_YEAR + 1):
         df_relevant_articles_or_events = df_relevant_articles_or_events.append(
@@ -101,7 +101,7 @@ def get_industry_level_practice_breakdown(labeled_industry_articles, industry_to
     #     {col_name_relevant_articles_or_events: len(relevant_articles_or_events)}, ignore_index=True
     # )
 
-    col_name_pterm_article_or_event = "Article count of practice term" if article_level else "Event count of practice term"
+    col_name_pterm_article_or_event = "Yearly Article count of practice term" if article_level else "Yearly Event count of practice term"
     df_practice_term_articles_or_events = pd.DataFrame(columns=['Year', 'Practice term', col_name_pterm_article_or_event])
     for year in range(MIN_YEAR, MAX_YEAR + 1):
         for p_term, set_IDs in dict_practice_term_articles_or_events[year].items():
@@ -185,7 +185,7 @@ def get_industry_level_practice_breakdown(labeled_industry_articles, industry_to
                                 # dict_practice_cat_risk_articles_or_events[year][practice_category][risk_term_col].add(
                                 #     row['TVL ID'])
 
-    col_name_pterm_rterm_article_or_event = "Article count of co-occurrence" if article_level else "Event count of co-occurrence"
+    col_name_pterm_rterm_article_or_event = "Yearly Article count of co-occurrence" if article_level else "Yearly Event count of co-occurrence"
     df_practice_risk_articles_or_events = pd.DataFrame(
         columns=['Year', 'Practice term', 'Risk term', col_name_pterm_rterm_article_or_event])
     for year in range(MIN_YEAR, MAX_YEAR + 1):
@@ -340,18 +340,18 @@ if __name__ == '__main__':
     labeled_industry_articles = labeled_industry_articles.reset_index()
 
     # Initialize dataframe for all GIC articles/events by industry/sector
-    col_name_relevant_articles_or_events = "Total LCSC Relevant Article count" if args.article_level else "Total LCSC Relevant Event count"
+    col_name_relevant_articles_or_events = "Yearly Total LCSC Relevant Article count" if args.article_level else "Yearly Total LCSC Relevant Event count"
     df_all_industry_relevant = pd.DataFrame(
         columns=['SECTOR', 'INDUSTRY', 'Year', col_name_relevant_articles_or_events]
     )
 
     # Initialize dataframe for practice terms by industry/sector
-    col_name_pterm_article_or_event = "Article count of practice term" if args.article_level else "Event count of practice term"
+    col_name_pterm_article_or_event = "Yearly Article count of practice term" if args.article_level else "Yearly Event count of practice term"
     df_all_industry_practices = pd.DataFrame(
         columns=['SECTOR', 'INDUSTRY', 'Year', 'Practice term', col_name_pterm_article_or_event])
 
     # Initialize dataframe for practice-risk co-occurrences by industry/sector
-    col_name_pterm_rterm_article_or_event = "Article count of co-occurrence" if args.article_level else "Event count of co-occurrence"
+    col_name_pterm_rterm_article_or_event = "Yearly Article count of co-occurrence" if args.article_level else "Yearly Event count of co-occurrence"
     df_all_industry_cooccurs = pd.DataFrame(
         columns=['SECTOR', 'INDUSTRY', 'Year', 'Practice term', 'Risk term', col_name_pterm_rterm_article_or_event])
 
