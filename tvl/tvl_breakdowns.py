@@ -48,7 +48,7 @@ def get_industry_level_practice_breakdown(labeled_industry_articles, industry_to
     # practice_term_articles_or_events = {}
     dict_practice_term_articles_or_events = {year: dict() for year in (MIN_YEAR, MAX_YEAR+1)}
     # practice_category_articles_or_events = {}
-    dict_practice_category_articles_or_events = {year: dict() for year in (MIN_YEAR, MAX_YEAR + 1)}
+    ## dict_practice_category_articles_or_events = {year: dict() for year in (MIN_YEAR, MAX_YEAR + 1)}
 
     for year in (MIN_YEAR, MAX_YEAR+1):
         year_subset = df_sub[(df_sub['ANY_PRACTICE_AND_RISK'] == 1) & (df_sub['RELEVANT?'] == 'Yes') & (df_sub['year'] == year)]
@@ -70,20 +70,20 @@ def get_industry_level_practice_breakdown(labeled_industry_articles, industry_to
                 # if practice_term_col not in practice_term_articles_or_events:
                 #     practice_term_articles_or_events[practice_term_col] = set()
 
-                practice_category = practice_term_col.split('_')[2]
-                if practice_category not in dict_practice_category_articles_or_events[year]:
-                    dict_practice_category_articles_or_events[year][practice_category] = set()
+                # practice_category = practice_term_col.split('_')[2]
+                # if practice_category not in dict_practice_category_articles_or_events[year]:
+                #     dict_practice_category_articles_or_events[year][practice_category] = set()
 
                 if row[practice_term_col] > 0:
                     if article_level:
                         dict_practice_term_articles_or_events[year][practice_term_col].add(row['index'])
                         # practice_term_articles_or_events[practice_term_col].add(row['index'])
-                        dict_practice_category_articles_or_events[year][practice_term_col].add(row['index'])
+                        ## dict_practice_category_articles_or_events[year][practice_term_col].add(row['index'])
                         # practice_category_articles_or_events[practice_category].add(row['index'])
                     else:
                         dict_practice_term_articles_or_events[year][practice_term_col].add(row['TVL ID'])
                         # practice_term_articles_or_events[practice_term_col].add(row['TVL ID'])
-                        dict_practice_category_articles_or_events[year][practice_term_col].add(row['TVL ID'])
+                        ## dict_practice_category_articles_or_events[year][practice_term_col].add(row['TVL ID'])
                         # practice_category_articles_or_events[practice_category].add(row['TVL ID'])
 
     col_name_relevant_articles_or_events = "LCSC Article count" if article_level else "LCSC Event count"
@@ -106,13 +106,13 @@ def get_industry_level_practice_breakdown(labeled_industry_articles, industry_to
     # df_practice_term_articles_or_events = df_practice_term_articles_or_events.sort_values(
     #     by=col_name_pterm_article_or_event, ascending=False)
 
-    col_name_pcat_article_or_event = "Article count of practice category" if article_level else "Event count of practice category"
-    df_practice_category_articles_or_events = pd.DataFrame(columns=['Practice category', col_name_pcat_article_or_event])
-    for year in (MIN_YEAR, MAX_YEAR + 1):
-        for p_term, set_IDs in dict_practice_category_articles_or_events[year].items():
-            df_practice_category_articles_or_events = df_practice_category_articles_or_events.append(
-                {'Year': year, 'Practice category': p_term, col_name_pcat_article_or_event: len(set_IDs)}, ignore_index=True
-            )
+    # col_name_pcat_article_or_event = "Article count of practice category" if article_level else "Event count of practice category"
+    # df_practice_category_articles_or_events = pd.DataFrame(columns=['Practice category', col_name_pcat_article_or_event])
+    # for year in (MIN_YEAR, MAX_YEAR + 1):
+    #     for p_term, set_IDs in dict_practice_category_articles_or_events[year].items():
+    #         df_practice_category_articles_or_events = df_practice_category_articles_or_events.append(
+    #             {'Year': year, 'Practice category': p_term, col_name_pcat_article_or_event: len(set_IDs)}, ignore_index=True
+    #         )
     # df_practice_category_articles_or_events = df_practice_category_articles_or_events.sort_values(
     #     by=col_name_pterm_article_or_event, ascending=False)
 
@@ -141,6 +141,7 @@ def get_industry_level_practice_breakdown(labeled_industry_articles, industry_to
         df_sub2 = labeled_industry_articles
 
     dict_practice_risk_articles_or_events = {year: dict() for year in (MIN_YEAR, MAX_YEAR+1)}
+    # dict_practice_cat_risk_articles_or_events = {year: dict() for year in (MIN_YEAR, MAX_YEAR + 1)}
     # practice_risk_articles_or_events = {}
     for year in (MIN_YEAR, MAX_YEAR + 1):
         year_subset = df_sub2[(df_sub2['ANY_PRACTICE_AND_RISK'] == 1) & (df_sub2['RELEVANT?'] == 'Yes') & (df_sub['year'] == year)]
@@ -148,17 +149,30 @@ def get_industry_level_practice_breakdown(labeled_industry_articles, industry_to
 
         for i, row in year_subset.iterrows():
             for practice_term_col in practice_term_cols:
+
                 if practice_term_col not in dict_practice_risk_articles_or_events[year]:
                     dict_practice_risk_articles_or_events[year][practice_term_col] = dict()  # {'practice term': {'risk_term': set()}}
+
+                # practice_category = practice_term_col.split('_')[2]
+                # if practice_category not in dict_practice_cat_risk_articles_or_events[year]:
+                #     dict_practice_cat_risk_articles_or_events[year][practice_category] = set()
+
                 if row[practice_term_col] > 0:
                     for risk_term_col in risk_term_cols:
+
                         if risk_term_col not in dict_practice_risk_articles_or_events[year][practice_term_col].keys():
                             dict_practice_risk_articles_or_events[year][practice_term_col][risk_term_col] = set()
+                        # if risk_term_col not in dict_practice_cat_risk_articles_or_events[year][practice_category].keys():
+                        #     dict_practice_cat_risk_articles_or_events[year][practice_category][risk_term_col] = set()
+
                         if row[risk_term_col] > 0:
                             if article_level:
                                 dict_practice_risk_articles_or_events[year][practice_term_col][risk_term_col].add(row['index'])
+                                # dict_practice_cat_risk_articles_or_events[year][practice_category][risk_term_col].add(row['index'])
                             else:
                                 dict_practice_risk_articles_or_events[year][practice_term_col][risk_term_col].add(row['TVL ID'])
+                                # dict_practice_cat_risk_articles_or_events[year][practice_category][risk_term_col].add(
+                                #     row['TVL ID'])
 
     col_name_pterm_rterm_article_or_event = "Article count of co-occurrence" if article_level else "Event count of co-occurrence"
     df_practice_risk_articles_or_events = pd.DataFrame(
@@ -169,6 +183,16 @@ def get_industry_level_practice_breakdown(labeled_industry_articles, industry_to
                 df_practice_risk_articles_or_events = df_practice_risk_articles_or_events.append(
                     {'Year': year, 'Practice term': p_term, 'Risk term': r_term, col_name_pterm_rterm_article_or_event: len(set_IDs)},
                     ignore_index=True)
+
+    # df_practice_cat_risk_articles_or_events = pd.DataFrame(
+    #     columns=['Year', 'Practice category', 'Risk term', col_name_pterm_rterm_article_or_event])
+    # for year in (MIN_YEAR, MAX_YEAR + 1):
+    #     for p_cat, r_terms in dict_practice_cat_risk_articles_or_events[year].items():
+    #         for r_term, set_IDs in r_terms.items():
+    #             df_practice_cat_risk_articles_or_events = df_practice_cat_risk_articles_or_events.append(
+    #                 {'Year': year, 'Practice category': p_cat, 'Risk term': r_term,
+    #                  col_name_pterm_rterm_article_or_event: len(set_IDs)},
+    #                 ignore_index=True)  # TODO: Add this to the outputs!
     # df_practice_risk_articles_or_events = df_practice_risk_articles_or_events.sort_values(
     #     by=col_name_pterm_rterm_article_or_event, ascending=False)
 
