@@ -340,7 +340,7 @@ if __name__ == '__main__':
     labeled_industry_articles = labeled_industry_articles.reset_index()
 
     # Initialize dataframe for all GIC articles/events by industry/sector
-    col_name_relevant_articles_or_events = "Yearly Total LCSC Relevant Article count" if args.article_level else "Yearly Total LCSC Relevant Event count"
+    col_name_relevant_articles_or_events = "Yearly LCSC Relevant Article count" if args.article_level else "Yearly LCSC Relevant Event count"
     df_all_industry_relevant = pd.DataFrame(
         columns=['SECTOR', 'INDUSTRY', 'Year', col_name_relevant_articles_or_events]
     )
